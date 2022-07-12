@@ -1,0 +1,54 @@
+h1,
+h2,
+h3,
+h4,
+p,
+li {
+  font-family: sans-serif;
+}
+h1 {
+  color: rgb(0, 0, 0);
+  font-size: 38px;
+  text-align: center;
+  line-height: 0.1px;
+  /* font-style:italic(代表設定字體為斜體）*/
+}
+p {
+  line-height: 0.5;
+}
+/*footer p {
+   you can customize p inside the footer
+}
+article header p {
+   customize the p insdie the header 
+    and the header inside the article
+}
+command是p的id在index.html中定義過，因此可以直接在css做客製化行為，只針對該
+p的內容*/
+#command {
+  font-style: italic;
+  font-family: DFkai-sb;
+}
+/*same class name can be used to different element(p or ol or...)
+once we modify class by .class_name we modify all element relate
+to that class name */
+.set {
+  /*rgba與rgb不同在於，rgba最後一欄表示透明度（從0~1)，越接近0越透明*/
+  color: red;
+}
+.list {
+  /* the follow code remove the dot from list*/
+  list-style: none;
+}
+.to-do-list {
+  border: 5px dashed blue;
+  /* border-top:只在上面有一條線當作邊界，其餘依此類推*/
+}
+body {
+  background-color: rgb(255, 255, 255);
+  padding: 0cm;
+}
+.order-list {
+  line-height: 1.5;
+  font-family: DFkai-sb;
+}

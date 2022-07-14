@@ -39,16 +39,160 @@ to that class name */
 .list {
   /* the follow code remove the dot from list*/
   list-style: none;
+  padding: 2px;
 }
 .to-do-list {
-  border: 5px dashed blue;
+  background-color: rgb(176, 238, 189);
+  border: 5px dashed rgb(0, 0, 0);
   /* border-top:只在上面有一條線當作邊界，其餘依此類推*/
 }
 body {
   background-color: rgb(255, 255, 255);
-  padding: 0cm;
+
+  /* padding: 20px 40px;前者代表上下的padding,後者代表左右的padding
+  margin概念也是一樣*/
 }
 .order-list {
   line-height: 1.5;
   font-family: DFkai-sb;
 }
+/* psudo class */
+/* li:first-child(直接針對每個list的第一個child做更動）
+li:last-child(針對最後一個child)
+li:nth-child(even)--針對奇數/偶數/指定child做更動
+article p:first-child--這裡只有在p是article中的第一個element時，才會有動作
+，他會根據article的element來比對，看是不是第一個/最後一個element
+然後採取相應的動作
+換句話說，psudo class只適用於child element是同樣類型的狀況，否則你指定第5個p
+但實際上他會去抓取第五個element，但不是p，所以只有在element type一樣的狀況
+才適用*/
+
+/*hyper link*/
+
+/*
+a:link---只針對實際具有連結的link做更改（ex:href="#"這種不算在內）
+a--會針對所有類型為a的做更改，包括實際在沒有連結的link
+*/
+a:link {
+  /*預設為inline element*/
+  text-decoration: none; /*沒有底線*/
+}
+
+a:visited {
+  /*針對點擊過的link做更改*/
+  color:black;
+}
+a:hover {
+  color: blue;
+  font-weight: bold;
+  text-decoration: underline red;
+}
+a:active {
+  /*點擊當下所採取的動作*/
+  background-color: aqua;
+  font-style: italic;
+}
+.unorder-list {
+  margin: 0;
+  padding: 0;
+}
+.color {
+  height: 40px;
+  background-color: greenyellow;
+}
+.one {
+  height: 40px;
+  background-color: orchid;
+}
+.two {
+  height: 40px;
+  background-color: paleturquoise;
+}
+.three {
+  height: 40px;
+  background-color: cornflowerblue;
+}
+.four {
+  height: 40px;
+  background-color: darkkhaki;
+}
+.five {
+  height: 40px;
+  background-color: yellow;
+}
+/*ID and class can have same name
+  class 名稱若中間有空格，則空格前後的名稱都可用於class名稱，當有衝突，以後面
+  那個為優先
+*/
+/* conflict */
+/* 當重複更改某個element時，會根據優先度選擇先依照哪個來更改，優先度如下：
+0. important(用法：後面加上 !important即可）．．．但不建議使用
+1. ID
+2. class（若有多個名稱指向同個element，則以後面那個優先）
+3. element(ex:p,div,li...)
+4.inheritance(繼承優先度是最低的---他會繼承父親的特性，但不通用於所有修改）
+5. universe sector
+．．．．
+1. a:link
+2.a
+.....
+1. complex selector(ex: .class_name nav a:link{....})
+2. simple selector(ex: .class_name{ ...})
+universe sector:將更改套用到每個element，且不會被繼承
+example:
+*{
+ color:..  . 
+} 
+img{
+  height:300px/100%(這裡是指，對應parent size的比例，若100%就是和parent一樣）
+  weight:auto代表寬會自動去搭配設定的長度
+  以下會讓左右的空白大小一樣，如此一來，可讓element維持在中間
+  margin-left:auto
+  margin-right:auto
+  
+}
+Inline element(ex: a:link) only apply 左右的padding and margin
+diskplay:block(代表element會繼承parent，寬度會是整個頁面的寬度）
+display:inline(代表每個element只佔用所需的空間,no padding/margin）
+display:inline-block(外部是block--可以有padding/margin，內部則是inline特性）
+
+/* normal/absoulately flow 
+button{
+  position:absolute/normal
+  （選擇對應模式，normal是預設，會隨著拉動頁面跟著動，absoulte會固定在某個點）
+  top/left/bottom/right:可選擇絕對位置
+  在absoulte模式下，需要同時在parent element設定position:relative
+  這樣CSS會依照button給予的位置，
+  從parent element中去找出定點，並將child element放置在對應位置上
+}
+
+/* psudo element（default as inline element) */
+/*
+h1::first-letter{ psudo element 需要兩個驚嘆號，psudo class只需要一個
+}
+h3+p::first-letter{針對h3後面的p做修改，這個例子，就是將每個h3後面的
+第一句話做更改
+}
+h2::after{//before與after相反，一開始會在h2的開頭新增內容，不過當設定好
+  絕對位置後，after/before就沒差異了
+  content:"Top"...在h2後面新增Top然後針對Top做各種設定
+  top:-10px;
+  right:-10px;負數的話，會超出邊界，假設0是在最右邊，那負數就會往更右邊擺
+}
+/* layout---float */
+/*
+float: left代表這個element會對齊 parent element的左側，然後CSS視其為不存在，
+  其他element會自動繞過他，可以想成是邊界的概念;
+若每個child都是float，那對CSS來說就沒有element了，height會直接歸0，為了避免
+這種狀況，可以使用clear:right/left/both來清除float
+若有多個element需要clear,可直接在parent(ex:header）宣吿class,再利用那個class
+做clear的動作
+ex:
+.clearfix{
+  clear:both;
+}
+設定element A float之後，後面的element B會自動圍繞前面的element A浮動
+，若針對後面的element B做clear，則element B就不受前面的element A影響（即使
+前面的element A有設定float)
+box-sizing:border-box;這會直接定義每個element的長寬，因此margin/padding
+會失去作用，因為整個element長寬固定住了

@@ -20,16 +20,6 @@ body {
   margin: 0 auto;
 }
 
-.main-header {
-  background-color: #f7f7f7;
-  /* padding: 20px;
-  padding-left: 40px;
-  padding-right: 40px; */
-  padding: 20px 40px;
-  margin-bottom: 60px;
-  /* height: 80px; */
-}
-
 nav {
   font-size: 18px;
   /* text-align: center; */
@@ -265,3 +255,32 @@ footer p {
 nav p {
   font-size: 18px;
 } */
+h1 {
+  float: left;
+}
+nav {
+  float: right;
+}
+.author-img {
+  float: left;
+}
+.author {
+  float: right;
+  padding-left: 80px;
+}
+.main-header {
+  background-color: red;
+  /* padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px; */
+  padding: 20px 40px;
+  margin-bottom: 60px;
+  /* height: 80px; */
+}
+.clear {
+}
+.notclearfix::after {
+  clear: both;
+  content: "";
+  display: block;
+}

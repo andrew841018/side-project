@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>to do list</title>
+    <title>To do list</title>
     <!--head用來存放一些關於html的設定
-        link用來告知html，哪個css是與這個網頁連結
-    -->
+        link用來告知html，哪個css是與這個網頁連結-->
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
@@ -12,7 +11,7 @@
     h後面的數字代表字體大小，數字越小，字體越大
     -->
     <!--strong and b can be used for bold...but recommand
-    strong 
+    strong  
     斜體：em.....代表強調某段話
     <p><strong>bold?(weird)</strong>ok what it <em>looks </em>like</p>
     -->
@@ -45,11 +44,17 @@
           <a
             href="https://trello.com/b/JpTH67Gl/%E5%BE%85%E5%AD%98%E5%85%A7%E5%AE%B9"
             target="_blank"
-            >trello</a
-          >
+            >trello
+          </a>
         </li>
         <li>
           <a href="blog.html">Blog </a>
+        </li>
+        <li>
+          <a href="flexbox.html">flexbox</a>
+        </li>
+        <li>
+          <a href="css-grid.html">css-grid</a>
         </li>
       </ol>
       <ul>
@@ -58,13 +63,25 @@
       </ul>
     </article>
     <aside>
-      <h3 class="set">related post</h3>
+      <h3 id="set" class="set pp">related post</h3>
       <ul class="list">
-        <li>
-          <img src="img/related-1.jpg" alt="related 1" width="75" height="75" />
-          <a href="#">I need time</a>
+        <li class="unorder-list">
+          <a href="#">you eat too much...</a>
+          <img
+            class="cat"
+            src="img/old cat.jpg"
+            alt="old cat"
+            width="350"
+            height="350"
+          />
         </li>
       </ul>
+      <div class="color"></div>
+      <div class="color one"></div>
+      <div class="color two"></div>
+      <div class="color three"></div>
+      <div class="color four"></div>
+      <div class="color five"></div>
     </aside>
     <!--footer:網頁最下端，直接將內容輸入，不需要child p(ex:<p>...)
     但如果想利用CSS設定footer內容，需要將內容用p包住    

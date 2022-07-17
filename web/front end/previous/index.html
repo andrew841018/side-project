@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To do list</title>
+    <!--head用來存放一些關於html的設定
+        link用來告知html，哪個css是與這個網頁連結-->
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!--h代表：head....標題，在body內代表可看見的標題
+    h後面的數字代表字體大小，數字越小，字體越大
+    -->
+    <!--strong and b can be used for bold...but recommand
+    strong  
+    斜體：em.....代表強調某段話
+    <p><strong>bold?(weird)</strong>ok what it <em>looks </em>like</p>
+    -->
+    <!--ol means order list(代表前面會有數字1,2,3....)
+    li:list item
+    ul:unorder list(前面就是個dot)....ul裡面仍然是li
+    img:圖片，裡面有兩個屬性--src，用來放圖片路徑（src="")
+    alt:當圖片存取錯誤時，顯示圖片的文字描述
+    width,height：長寬
+-->
+
+    <!--
+        a:hyper link 外匡
+        href:hyper link element
+        target="_blank"....開啟網頁時會直接新增分頁
+        href="#"....不指向任何網站（會回到原本的網站）
+        nav:導覽，可用來裝所有url element的容器
+        header & article:都是用來包裝其他物件的容器,header通常放標題
+        article,會放文章 內容
+    -->
+    <header>
+      <h1>To do list</h1>
+      <nav>
+        <p id="command">要買的清單</p>
+      </nav>
+    </header>
+    <article class="to-do-list">
+      <ol class="order-list">
+        <li>
+          <a
+            href="https://trello.com/b/JpTH67Gl/%E5%BE%85%E5%AD%98%E5%85%A7%E5%AE%B9"
+            target="_blank"
+            >trello
+          </a>
+        </li>
+        <li>
+          <a href="blog.html">Blog </a>
+        </li>
+        <li>
+          <a href="flexbox.html">flexbox</a>
+        </li>
+        <li>
+          <a href="css-grid.html">css-grid</a>
+        </li>
+      </ol>
+      <ul>
+        <li></li>
+        <li></li>
+      </ul>
+    </article>
+    <aside class="parent">
+      <h3 id="set" class="set pp">related post</h3>
+      <ul class="list">
+        <li class="unorder-list">
+          <a href="#">you eat too much...</a>
+          <img
+            class="cat"
+            src="img/old cat.jpg"
+            alt="old cat"
+            width="350"
+            height="350"
+          />
+        </li>
+      </ul>
+      <div class="color"></div>
+      <div class="color one"></div>
+      <div class="color two"></div>
+      <div class="color three"></div>
+      <div class="color four"></div>
+      <div class="color five"></div>
+    </aside>
+    <!--footer:網頁最下端，直接將內容輸入，不需要child p(ex:<p>...)
+    但如果想利用CSS設定footer內容，需要將內容用p包住    
+    -->
+    <footer>
+      <p>Copyright &copy; add by andrew;</p>
+    </footer>
+  </body>
+</html>

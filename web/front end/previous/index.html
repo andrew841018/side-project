@@ -91,3 +91,40 @@
     </footer>
   </body>
 </html>
+<!--
+  下面主要是table 的架構，tr(table row)代表每一列，
+  td(table data)則是每一列的每個element
+  thead,tbody可以將table想成是一個html，裡面的head和body
+  th(table head)屬於一種element type，他會將特定element標記出來（加黑加粗）
+table{
+  border-collapse:collapse;//將重疊的border去掉，變成一般的table
+}  
+th,td{
+  border 1px solid blue;
+}
+thread th{
+  width=25%;//assign 25% of parent width to each th element
+  如果只有3個element或者5個以上：
+  3個：
+  25%+25%+25%,剩餘空間就會留白
+  5個：
+  實際分配狀況不確定，但應該不會是25% 
+}
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+-->

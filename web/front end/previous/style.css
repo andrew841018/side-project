@@ -3,7 +3,7 @@ h2,
 h3,
 h4,
 p,
-li {
+li{
   font-family: sans-serif;
 }
 h1 {
@@ -50,7 +50,11 @@ body {
   background-color: rgb(255, 255, 255);
 
   /* padding: 20px 40px;前者代表上下的padding,後者代表左右的padding
-  margin概念也是一樣*/
+  margin概念也是一樣
+  margin:auto auto(代表上下左右都是位於中間）
+  更進階的簡寫：其實就是從top開始順時針方向走，如下
+  padding:20px 30px 40px 50px＝(top,right,bottom,left)
+  */
 }
 .order-list {
   line-height: 1.5;
@@ -158,7 +162,7 @@ img{
 }
 Inline element(ex: a:link) only apply 左右的padding and margin
 diskplay:block(代表element會繼承parent，寬度會是整個頁面的寬度）
-display:inline(代表每個element只佔用所需的空間,no padding/margin）
+display:inline(代表每個element只佔用所需的空間,no top,buttom padding/margin）
 display:inline-block(外部是block--可以有padding/margin，內部則是inline特性）
 
 /* normal/absoulately flow 
@@ -211,4 +215,83 @@ box-sizing:border-box;這會直接定義每個element的長寬，因此margin/pa
 *  放大img  *
 img{
   transform:scale(1.5)//放大img 1.5倍（長＆寬）
+}
+.btn{
+  position:absolute;
+
+  根據parent height來計算，50%代表從頂端往下移動parent height*0.5的距離
+  top:50%
+  但實際上element並不會位於中央，因為是『移動』50%那實際上element的位置會更靠
+  bottom，因此，會需要下面這行code。
+
+  第一個變數0，表示水平方向不移動，第二個變數-50%代表垂直方向往回（to the top)
+  move 50%，而這個50%不是parent的50%是element本身height的50％
+  最後，translate代表平移
+  transform:translate(0,-50%)
+}
+＊＊ 後代選擇器 ＊＊
+//在hover .btn時，將parent class .btn的child .btn-icon修改
+所以空格不是and，而是指parent下的child
+.btn:hover .btn-icon{
+  ...
+}
+//這裡.page-link:link代表兩個class『page-link』 and 『link』
+.page-link:link,
+.page-link:visited {
+  
+}
+//由於這裡存在.page-link--current，這裡只有一個class因此優先度低於上面兩個class
+解釋：
+在這裡前面這兩個 .page-link:hover .page-link:active不算是兩個class，因為
+在這裡實際上規則是用於page-link--current，而上面兩個只是表達『什麼情況下適用』
+因此這裡.page-link--current只有一個class優先度較低
+.page-link:hover,
+.page-link:active,
+ page-link--current {
+
+}
+同上，但這裡.page-link.page-link--current表示同時適用於『page-link』
+＆『page-link--current』因此算是兩個class，而同樣是兩個class的情況下
+後者優先度更高，因此這時候這裡的規則會優先適用
+.page-link:hover,
+.page-link:active,
+.page-link.page-link--current {
+
+}
+".page-link.page-link--current" is and selector,
+ means rule appy both sector.
+
+vh(view height),vw(view width):分別表示視線內的高＆寬，以高為例，設為100%
+那就會是整個畫面
+ex:
+  height:100vh;
+
+Hint: remember set width
+ex:
+ .container{
+  margin:0 auto--->ok in the middle but....where is width?
+  width:1200px--->remember this!!!!
+}
+header{
+  background-image:url(img_path);//load background img from disk
+  background-size:cover;//自動調整img實際需要的大小．．．類似inline
+  ** advance of background-img  **
+  漸層-->讓圖片顏色變黑(將多個顏色疊起來）
+  background-image:
+    //linear-gradient會將顏色混合
+    linear-gradient(rgba(34, 34, 34, 0.6),rgba(34, 34, 34, 0.6))
+    ,url(img_path);
+}
+nav:多個link的集合
+ex:
+<nav>
+  <link></link>
+  <link></link>
+  ...
+</nav>
+** 當內容超出邊界，可以藉由滑動去看更多內容 **
+.email{
+  overflow:scroll;//it is not only use in flexbox, all css can use
+  display:flex;
+  flex-shrink:0;//only used in flex-box
 }

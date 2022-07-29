@@ -1,0 +1,38 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  color: blue;
+}
+.test {
+  max-width: 1000px; /* 視窗寬度隨著視窗變動，最大為1000px，小於1000px就會等於當下視窗的寬度 */
+  background-color: aqua;
+  padding: 100px;
+  /*  rem=16px,16px是html預設字體大小，每個px皆可用rem來取代，優點是，當你更改html font-size，你就會同時
+  更改到每個以rem定義的長度（ex:padding,margin,width....)*/
+}
+html {
+  /* 為了讓使用者能夠更改字體，font-size以比例顯示更好，for example:font-size: 62.5%, it means
+    10px/16px=actual font size（我們希望顯示的字體）/default font size=0.625=62.5%-->1 rem=10px
+    因此，如果使用者更改default font size，那就會影響到實際顯示的字體，讓使用者能根據自己喜好更改字體
+    for example:user change default font size to 100px, then 0.625*100=625px=1rem，這時使用者就會更改
+    單位rem代表的px數*/
+  font-size: 62.5%;
+}
+.section-hero {
+  display: grid;
+  max-width: 130rem;
+  background-color: aquamarine;
+  /* 將child各自分配一半的空間，two child,one is for text,
+  the other is for img.
+  */
+  grid-template-columns: 1fr 1fr;
+}
+.hero-img {
+  width: 100%;
+}

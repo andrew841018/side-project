@@ -60,7 +60,7 @@ body {
   line-height: 1.5;
   font-family: DFkai-sb;
 }
-/* psudo class */
+/* psudo class(針對class內的每個element做修改） */
 /* li:first-child(直接針對每個list的第一個child做更動）
 li:last-child(針對最後一個child)
 li:nth-child(even)--針對奇數/偶數/指定child做更動
@@ -175,12 +175,14 @@ button{
   從parent element中去找出定點，並將child element放置在對應位置上
 }
 
-/* psudo element（default as inline element) */
+/* psudo element（default as inline element)-->針對某個element內的每個item做修改
+如果element是一個字串，那就可以特定某些字元做某些修改
+*/
 /*
 h1::first-letter{ psudo element 需要兩個驚嘆號，psudo class只需要一個
 }
 h3+p::first-letter{針對h3後面的p做修改，這個例子，就是將每個h3後面的
-第一句話做更改
+第一句話做更改....又稱兄弟，就是彼此相連的selector
 }
 h2::after{//before與after相反，一開始會在h2的開頭新增內容，不過當設定好
   絕對位置後，after/before就沒差異了
@@ -295,3 +297,7 @@ ex:
   display:flex;
   flex-shrink:0;//only used in flex-box
 }
+/* 
+*** 繼承 ****
+border related 不會被繼承，通常只有文字相關（顏色＆大小．．．）會繼承父親
+

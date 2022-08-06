@@ -8,31 +8,37 @@
 body {
   color: #444;
   font-family: sans-serif;
-
+  /*position: relative;*/
   border-top: 10px solid #1098ad;
-  position: relative;
 }
 
 .container {
-  width: 800px;
+  width: 1200px;
   /* margin-left: auto;
   margin-right: auto; */
   margin: 0 auto;
 }
 
 .main-header {
-  background-color: #f7f7f7;
   /* padding: 20px;
   padding-left: 40px;
   padding-right: 40px; */
-  padding: 20px 40px;
+  padding: 20px 0px;
   margin-bottom: 60px;
+
   /* height: 80px; */
 }
-
-nav {
-  font-size: 18px;
-  /* text-align: center; */
+article {
+  width: 850px;
+  padding: 10px;
+  float: left;
+}
+aside {
+  float: right;
+  width: 300px;
+}
+.clear::after {
+  clear: both;
 }
 
 article {
@@ -51,7 +57,6 @@ aside {
   /* padding-top: 50px;
   padding-bottom: 50px; */
   padding: 50px 0;
-  width: 500px;
 }
 
 /* SMALLER ELEMENTS */
@@ -63,8 +68,12 @@ h3 {
 
 h1 {
   font-size: 26px;
+  margin-right: 14px;
   text-transform: uppercase;
   font-style: italic;
+  background-color: #f1f3f5;
+  padding: 10px;
+  flex: left;
 }
 
 h2 {
@@ -188,33 +197,33 @@ a:active {
   width: 100%;
   height: auto;
 }
-
-nav a:link {
+nav {
+  font-size: 18px;
+}
+nav a {
   /* background-color: orangered;
   margin: 20px;
   padding: 20px;
 
   display: block; */
-
-  margin-right: 30px;
+  position: relative;
+  top: -50px;
+  right: 10px;
+  margin-right: 20px;
   margin-top: 10px;
-  display: inline-block;
-}
-
-nav a:link:last-child {
-  margin-right: 0;
+  float: right;
 }
 
 button {
   font-size: 22px;
-  padding: 20px;
+  padding: 5px;
   cursor: pointer;
 
   position: absolute;
   /* top: 50px;
   left: 50px; */
-  bottom: 50px;
-  right: 50px;
+  bottom: -1825px;
+  right: 10px;
 }
 
 h1::first-letter {
@@ -243,7 +252,9 @@ h2::before {
   top: -10px;
   right: -25px;
 }
-
+footer {
+  clear: both;
+}
 /* Resolving conflicts */
 /* #copyright {
   color: red;

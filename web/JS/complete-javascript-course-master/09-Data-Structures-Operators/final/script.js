@@ -14,6 +14,10 @@ const openingHours = {
     open: 0, // Open 24 hours
     close: 24,
   },
+  [weekdays[6]]: {
+    open: 3,
+    close: 21,
+  },
 };
 
 const restaurant = {
@@ -47,7 +51,6 @@ const restaurant = {
     console.log(otherIngredients);
   },
 };
-
 ///////////////////////////////////////
 // String Methods Practice
 
@@ -102,10 +105,25 @@ Afterwards, test with your own test data!
 GOOD LUCK 😀
 */
 
-/*
 document.body.append(document.createElement('textarea'));
 document.body.append(document.createElement('button'));
-
+const text = document.querySelector('textarea').value;
+document.querySelector('button').addEventListener('click', function () {
+  let str = document.querySelector('textarea').value;
+  let line = str.split('\n');
+  let output = '';
+  let count = 1;
+  for (let i of line) {
+    let [first_1, second_1] = i.trim().split('_');
+    first_1 = first_1.toLowerCase();
+    second_1 = second_1[0].toUpperCase() + second_1.slice(1);
+    output +=
+      String(first_1 + second_1).padEnd(20, ' ') + '✅'.repeat(count++) + '\n';
+  }
+  console.log(output);
+  //document.querySelector('textarea').textContent = str;
+});
+/*
 document.querySelector('button').addEventListener('click', function () {
   const text = document.querySelector('textarea').value;
   const rows = text.split('\n');
@@ -310,8 +328,24 @@ const gameEvents = new Map([
   [80, '⚽️ GOAL'],
   [92, '🔶 Yellow card'],
 ]);
-
-/*
+let events = [...new Set(gameEvents.values())];
+for (let i = 0; i < events.size; i++) {
+  console.log(events[i]);
+}
+gameEvents.delete(64);
+let diff,
+  sum1 = 0,
+  avg;
+let arr1 = [...gameEvents.keys()];
+let time = arr1.pop();
+console.log(
+  `An event happened,on average, every ${time / gameEvents.size} minutes`
+);
+for (let i = 0; i < gameEvents.size; i++) {
+  let str = arr1[i] <= 45 ? 'FIRST' : 'SECOND';
+  console.log(`[${str} HALF]${arr1[i]} : ${gameEvents.get(arr1[i])}`);
+}
+/*  
 // 1.
 const events = [...new Set(gameEvents.values())];
 console.log(events);
@@ -468,7 +502,7 @@ BONUS: Create an object called 'scorers' which contains the names of the players
 GOOD LUCK 😀
 */
 
-const game = {
+let game = {
   team1: 'Bayern Munich',
   team2: 'Borrussia Dortmund',
   players: [
@@ -506,14 +540,46 @@ const game = {
     team1: 1.33,
     x: 3.25,
     team2: 6.5,
+    //draw:
   },
 };
+//challenge 1
+let printGoals = function (...player) {
+  console.log(player, player.length);
+};
+printGoals(game.score);
+let [players1, players2] = game.players;
+let [gk, fieldPlayers] = players1;
+let allPlayers = [...players1, ...players2];
+let players1Final = [...players1, 'Thiago', 'Coutinho', 'Periscic'];
+let {
+  odds: { team1, x: draw, team2 },
+} = game;
+console.log(team1, draw, team2);
+team1 < team2 && console.log(team1);
+team2 < team1 && console.log(team2);
+//challenge2
+let entry = Object.entries(game);
+for (let [index, content] of game.scored.entries()) {
+  console.log('Goal ' + `${index + 1}` + ':', content);
+}
+let value = Object.values(game.odds);
+let sum = 0;
+for (let i of value) {
+  sum += i;
+}
+let entry_1 = Object.entries(game.odds);
+console.log(sum / value.length);
+for (let [team, odds] of entry_1) {
+  let str = team == 'x' ? 'draw' : `victory ${game[team]}`;
+  console.log(`Odd of ${str}: ${odds}`);
+}
 
 /*
 // 1.
 for (const [i, player] of game.scored.entries())
   console.log(`Goal ${i + 1}: ${player}`);
-
+ 
 // 2.
 const odds = Object.values(game.odds);
 let average = 0;

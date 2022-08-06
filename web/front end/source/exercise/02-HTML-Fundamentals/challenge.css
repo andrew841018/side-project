@@ -14,7 +14,6 @@ h2 {
 }
 .border {
   border: 4px solid black;
-  width: 825px;
   margin: 50px auto;
 }
 /* 若將所有element設為float,css會當作沒有element，如何解決：
@@ -26,11 +25,6 @@ h2 {
 這樣做法看似沒意義，其實我們是希望具有float特性的同時，又讓float的缺點（css看不見element)
 給消除掉
 */
-.border::after {
-  display: block;
-  content: "";
-  clear: both;
-}
 
 .product-detail {
   font-size: 17px;
@@ -59,31 +53,27 @@ ul li {
   margin-bottom: 5px;
 }
 .More-info {
-  display: block;
   margin-bottom: 10px;
   color: black;
 }
 .price {
-  display: inline-block;
   margin-bottom: 10px;
 }
 .free-ship {
   font-size: 12px;
   float: right;
   margin-top: 10px;
-  display: inline-block;
   text-transform: uppercase;
   color: #777;
 }
 .color {
-  display: inline-block;
   background-color: black;
-  height: 25px;
-  width: 25px;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 .sale {
   background-color: aqua;
-  display: inline-block;
   text-transform: uppercase;
   position: absolute;
   font-weight: bold;
@@ -110,17 +100,21 @@ ul li {
   background-color: rgb(135, 88, 88);
 }
 .shoe {
-  float: left;
+  g
+  display: flex;
   margin-right: 40px;
+  flex-grow: 1;
 }
 .mid {
-  float: left;
+  display: flex;
+  flex-grow: 1;
   margin-top: 30px;
   margin-right: 40px;
-  width: 243px;
+  align-content: center;
 }
 .right {
+  display: flex;
+  align-content: center;
+  flex-grow: 1;
   margin-top: 30px;
-  float: left;
-  width: 243px;
 }

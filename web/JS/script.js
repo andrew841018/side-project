@@ -695,3 +695,70 @@ arr.slice(-1);
 arr.at(-1); //the last element of array
 arr.at(-2); //倒數第二個．．．與slice不同，slice會抓最後兩個
 arr.at(0); //the first element of array
+//for each
+arr = [1, 3, 45, 6, 5, 3, 5, 42];
+//foreach不見得要有3個參數，可以使用1 or 2個，但順序不變
+//一定是，array內容，array index,array本身
+//此外，foreach是無法break or continue
+//foreach類似宣告個function，然後自動把每個值套進去
+arr.forEach(function (content, i, arr) {
+  if (content % 2 == 0) {
+    console.log(i, content);
+  } else {
+    console.log(`oh no ${i} ${content}`);
+  }
+});
+//foreach use in map & set
+//for map=>key=index,value=content
+//for set,because there is no index & content
+//所以，對於set來說index & content都會輸出一樣的內容->content
+set = new Set(['a', '5', 'df', '12', 'Y']);
+set.forEach(function (value, key, set) {
+  console.log(`${value} ${key}`); //value=key--->both is set element
+});
+//Array-map->以function的形式運作
+//會自動執行類似foreach的動作，掃過arr每個element,return as array
+arr = [1, 5, 8, 5, 44, 3435, 43, 413];
+//noraml function way
+/*arr1 = arr.map(function (content, index) {
+  console.log(content * 3.14, index);
+  return content * 3.14;
+});*/
+//arrow way
+arr1 = arr.map(content => content * 3.14);
+console.log(arr1);
+//array filter
+//arrow function=>elem是丟進function的參數，這裡會自動抓取arr裡面
+//的每個element,當elem%2==1為true,才會將資料回傳，因此
+//array positive只會存基數的內容
+arr = [200, 450, -400, 3000, -650, -130, 70, 1300];
+let negative = arr.filter(elem => elem < 0);
+console.log(negative);
+//array reduce
+//sum
+//acc是累加總和,回傳值會被加入acc=>(acc=acc+cur),0代表acc初始值
+let reduce = arr.reduce((acc, cur) => acc + cur, 0);
+console.log(reduce);
+
+//challenge 2
+test = [5, 2, 4, 1, 15, 8, 3];
+let test_1 = [16, 6, 10, 5, 6, 1, 4];
+// acc=acc+cur/arr.length==>average(將每個element加起來，變成整體平均)
+/*
+let human_age = dog_age =>
+  dog_age
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+*/
+//array-find
+//find return a element(int or float...)
+//find only return the first one element which meet the requirement.
+let first_target = test.find(mov => mov > 0);
+console.log(first_target);
+console.log(test);
+
+let charCount = function (str) {
+  //str是否為a- z or 0-9--->正則表示
+  return /[a-z0-9]/.test(str);
+};

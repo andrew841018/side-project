@@ -8,41 +8,14 @@
 body {
   color: #444;
   font-family: sans-serif;
-  /*position: relative;*/
+
   border-top: 10px solid #1098ad;
-}
-
-.container {
-  width: 1200px;
-  /* margin-left: auto;
-  margin-right: auto; */
-  margin: 0 auto;
-}
-
-.main-header {
-  /* padding: 20px;
-  padding-left: 40px;
-  padding-right: 40px; */
-  padding: 20px 0px;
-  margin-bottom: 60px;
-
-  /* height: 80px; */
-}
-article {
-  width: 850px;
-  padding: 10px;
-  float: left;
-}
-aside {
-  float: right;
-  width: 300px;
-}
-.clear::after {
-  clear: both;
+  position: relative;
 }
 
 article {
   margin-bottom: 60px;
+  grid-column: 1 /2;
 }
 
 .post-header {
@@ -56,7 +29,15 @@ aside {
   border-bottom: 5px solid #1098ad;
   /* padding-top: 50px;
   padding-bottom: 50px; */
-  padding: 50px 0;
+  padding: 20px 0;
+  width: 300px;
+}
+.related-li {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto;
+  gap: 20px;
 }
 
 /* SMALLER ELEMENTS */
@@ -68,12 +49,8 @@ h3 {
 
 h1 {
   font-size: 26px;
-  margin-right: 14px;
   text-transform: uppercase;
   font-style: italic;
-  background-color: #f1f3f5;
-  padding: 10px;
-  flex: left;
 }
 
 h2 {
@@ -101,8 +78,10 @@ p {
 
 ul,
 ol {
-  margin-left: 50px;
+  margin-left: 20px;
   margin-bottom: 20px;
+  padding-right: 15px;
+  padding-bottom: 20px;
 }
 
 li {
@@ -114,15 +93,6 @@ li {
 li:last-child {
   margin-bottom: 0;
 }
-
-/* footer p {
-  font-size: 16px;
-} */
-
-/* article header p {
-  font-style: italic;
-} */
-
 #author {
   font-style: italic;
   font-size: 18px;
@@ -136,33 +106,15 @@ li:last-child {
   font-size: 18px;
   font-weight: bold;
 }
-
-/* ul {
-  list-style: none;
-} */
-
 .related {
   list-style: none;
 }
-
-body {
-  /* background-color: orangered; */
-}
-
-/* .first-li {
-  font-weight: bold;
-} */
-
 li:first-child {
   font-weight: bold;
 }
 
 li:last-child {
   font-style: italic;
-}
-
-li:nth-child(even) {
-  /* color: red; */
 }
 
 /* Misconception: this won't work! */
@@ -173,6 +125,7 @@ article p:first-child {
 /* Styling links */
 a:link {
   color: #1098ad;
+  font-size: 20px;
   text-decoration: none;
 }
 
@@ -197,33 +150,31 @@ a:active {
   width: 100%;
   height: auto;
 }
-nav {
-  font-size: 18px;
-}
-nav a {
+
+nav a:link {
   /* background-color: orangered;
   margin: 20px;
   padding: 20px;
 
   display: block; */
-  position: relative;
-  top: -50px;
-  right: 10px;
-  margin-right: 20px;
+  margin-right: 10px;
   margin-top: 10px;
-  float: right;
+}
+
+nav a:link:last-child {
+  margin-right: 0;
 }
 
 button {
   font-size: 22px;
-  padding: 5px;
+  padding: 20px;
   cursor: pointer;
 
   position: absolute;
   /* top: 50px;
   left: 50px; */
-  bottom: -1825px;
-  right: 10px;
+  bottom: 50px;
+  right: 50px;
 }
 
 h1::first-letter {
@@ -250,29 +201,29 @@ h2::before {
   padding: 5px 10px;
   position: absolute;
   top: -10px;
-  right: -25px;
+  right: 20px;
 }
 footer {
-  clear: both;
-}
-/* Resolving conflicts */
-/* #copyright {
-  color: red;
-}
-
-.copyright {
-  color: blue;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-left: 30px;
+  margin-bottom: 20px;
 }
 
-.text {
-  color: yellow;
+.container {
+  width: 1250px;
+  /* margin-left: auto;
+  margin-right: auto; */
+  margin-left: 30px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 80px;
+  align-items: start;
 }
-
-footer p {
-  color: green !important;
-} */
-
-/* nav a:link,
-nav p {
-  font-size: 18px;
-} */
+.main-header {
+  display: grid;
+  padding: 15px;
+  background-color: #f7f7f7;
+  grid-template-columns: 1fr auto;
+  grid-column: 1/3;
+}

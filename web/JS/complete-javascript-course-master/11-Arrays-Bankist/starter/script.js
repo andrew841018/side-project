@@ -61,10 +61,44 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = ''; //initial-->刪除html一開始的資訊->沒有初始資訊
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = ` <div class="movements__row">
+    <div class="movements__type movements__type--${type}">${i + 1} deposit</div>
+    <div class="movements__value">${mov}</div>
+  </div>`;
+    //將字串html放在movement最上層，代表在.movement這個class最上面新增html裡面指定
+    //的元素
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+displayMovements(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
+const calcDisplayBalance = function (array) {
+  let sum = array.reduce((acc, cur) => acc + cur, 0);
+  labelBalance.textContent = `${sum} TWD`;
+};
+calcDisplayBalance(account1.movements);
+const calcDisplaySummary = function (movements) {
+  let sum = movements.filter(mov => mov > 0).reduce((acc, cur) => acc + cur, 0);
+  let output_str = `${sum}$`;
+  labelSumIn.textContent = output_str;
+  sum = movements.filter(mov => mov < 0).reduce((acc, cur) => acc + cur, 0);
+  output_str = `${Math.abs(sum)}$`;
+  labelSumOut.textContent = output_str;
+  let intetest = movements
+    .filter(money => money > 0)
+    .map(money => (money * 1.2) / 100) //利息
+    .filter(money => money >= 1) //>1 then 加入
+    .reduce((acc, cur) => acc + cur, 0); //計算總和
+  labelSumInterest.textContent = `${intetest}$`;
+};
+calcDisplaySummary(account1.movements);
 const currencies = new Map([
   ['USD', 'United States dollar'],
   ['EUR', 'Euro'],
@@ -74,3 +108,10 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+const EurtoTWD = 29.7; //Eur to Taiwan dolors.
+const movementsTWD = movements.map(Eur => Eur * EurtoTWD);
+
+btnLogin.addEventListener('click', function (e) {
+  //prevent from
+  e.preventDefault();
+});

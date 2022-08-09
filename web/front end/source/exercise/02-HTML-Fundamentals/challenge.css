@@ -4,18 +4,24 @@
 }
 body {
   font-family: sans-serif;
+  margin-top: 10px;
 }
 h2 {
   font-size: 23px;
   text-align: center;
+  padding: 15px;
   text-transform: uppercase;
-  margin: 15px;
   background-color: #f7f7f7;
+  grid-column: 1/4;
 }
 .border {
-  border: 4px solid black;
+  width: 825px;
+  border: 5px solid black;
   margin: 50px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
+
 /* 若將所有element設為float,css會當作沒有element，如何解決：
 1. 將某個box包住所有element,並定義class name
 2. 根據class name--假設是border,到class最後面新增content(如下）
@@ -28,17 +34,17 @@ h2 {
 
 .product-detail {
   font-size: 17px;
-  margin-bottom: 15px;
   text-transform: uppercase;
 }
 .btn {
   color: white;
+  margin-top: 12px;
   font-size: 20px;
   text-transform: uppercase;
-  width: 100%;
   background-color: black;
   border: 4px solid black;
   padding: 15px;
+  grid-column: 1/4;
 }
 .btn:hover {
   color: black;
@@ -61,28 +67,37 @@ ul li {
 }
 .free-ship {
   font-size: 12px;
-  float: right;
   margin-top: 10px;
   text-transform: uppercase;
   color: #777;
 }
-.color {
-  background-color: black;
-  display: flex;
-  flex-grow: 1;
-  flex-shrink: 1;
-}
 .sale {
+  display: inline-block;
   background-color: aqua;
   text-transform: uppercase;
-  position: absolute;
+  position: relative;
   font-weight: bold;
   padding: 0 5px;
-  left: 130px;
-  top: 40px;
+  left: -610px;
+  top: -130px;
 }
-.black {
+.box-color {
+  margin-top: 20px;
+}
+.paragraph {
+  grid-column: 1/2;
+  grid-row: 2/3;
+}
+article a {
+  grid-column: 1/2;
+  grid-row: 3/4;
+}
+.color {
+  display: inline-block;
+  margin-right: 10px;
   background-color: black;
+  width: 25px;
+  height: 25px;
 }
 .blue {
   background-color: blue;
@@ -99,22 +114,17 @@ ul li {
 .brown {
   background-color: rgb(135, 88, 88);
 }
-.shoe {
-  g
-  display: flex;
-  margin-right: 40px;
-  flex-grow: 1;
-}
 .mid {
-  display: flex;
-  flex-grow: 1;
-  margin-top: 30px;
-  margin-right: 40px;
-  align-content: center;
+  display: grid;
+  margin-top: 20px;
+  margin-right: 20px;
+  line-height: 1.3;
 }
 .right {
-  display: flex;
-  align-content: center;
-  flex-grow: 1;
   margin-top: 30px;
+}
+.first-line {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
 }

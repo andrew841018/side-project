@@ -753,7 +753,7 @@ let human_age = dog_age =>
 */
 //array-find
 //find return a element(int or float...)
-//find only return the first one element which meet the requirement.
+//find only return the "first one element" which meet the requirement.
 let first_target = test.find(mov => mov > 0);
 console.log(first_target);
 console.log(test);
@@ -762,3 +762,105 @@ let charCount = function (str) {
   //str是否為a- z or 0-9--->正則表示
   return /[a-z0-9]/.test(str);
 };
+//findindex-->類似find,但是會return index
+// some vs inclouds
+//some會指定一個明確的條件，存在符合的element就return true
+//incloude則必須存在某個element，才return true
+//incloude相當於在some設立相等的條件
+arr.includes(450); //true or false
+arr.some(elem => elem > 300); //true or false
+//every elemet meet the condition,then return true
+arr.every(elem => elem > 0);
+//anther way to implement some/every
+//remember:this function only accept one argument
+let using_func = elem => elem * 3 + 8 > 15;
+arr.every(using_func);
+arr.some(using_func);
+// flat
+//會直接將arr內部的element抓出，最深可以抓到第二層
+arr = [1, 2, 3, 4, 5, [6]]; //第二層的例子
+arr.flat();
+//最深可以抓取到第三層的資料
+arr = [1, 2, 3, [4], [5, 6, [7]]]; //第三層的例子
+arr.flat(2); //什麼都不打預設是1,所以能抓到第二層的資料
+console.log(arr.flat(2));
+//map+flat
+//flatMap中，flat只能深入2層（預設）無法更深入
+arr.flatMap(elem => elem * 9); //先將each element*9 return new array,再抓出每個element.
+//sort
+/*
+return<0,A,B不變
+return>0 A,B switch-->swap(a,b)
+return 0,A,B不變
+*/
+//他在做a-b,所以負數代表a<b,反之，a>b
+//ascending order
+arr.sort((a, b) => {
+  if (a > b) return 1;
+  if (a < b) return -1;
+});
+//descending order
+arr.sort((a, b) => {
+  if (a > b) return -1;
+  if (a < b) return 1;
+});
+//簡化
+//ascending order(預設的做法就是遞增)
+arr.sort((a, b) => a - b); //a>b就會return positive,反之negative
+//descending order
+arr.sort((a, b) => b - a);
+//init Array
+arr = new Array(7); //assign new space witout value
+arr1 = new Array(1, 2, 34, 5, 3, 53, 4, 3);
+console.log(arr);
+//fill   fill(element,start_index,end_index);
+arr.fill(1); //fill up all space wit 1
+arr.fill(1, 3); //fill 1 from index 3 to the end
+arr.fill(2, 2, 5); //fill 2 from index 2 to index 4(not incloude index 5)
+// array-from
+arr2 = Array.from({ length: 18 }, () => 1); //init to 1 and set size
+arr2 = Array.from({ length: 8 }, (elem, index) => index + 1); //後半段類似map,可使用element & index
+arr2 = Array.from({ length: 100 }, () => Math.trunc(Math.random() * 6) + 1); //後半段類似map,可使用element & index
+// document.querySelectorAll return an array
+/* example:
+Array.from(document.querySelectoryAll('.class_name')
+,str=>Number(str.textContent));
+*/
+/* reduce(advance)*/
+/*
+example:
+const{deposits,withdrawals}=accounts.flatMap.reduce((sum,cur)=>{
+  // one way to implement
+  //這裡是對物件做計算，因此需要手動return,所以算完的結果要自己加回去
+  cur>0?(sum.deposits+=cur):(sum.withdrawals+=cur);
+  //another way to implement
+  sum[cur>0?'deposits':'withdrawals']+=cur;
+  //由於目標是物件，因此reduce沒辦法幫忙assign
+  //ex:sum=sum.deposits+cur(這是reduce如果要做的做法，但語法是錯的
+  只適用於數字，因此這裡return & assign都要自己來）
+  return sum;
+  //inital:這裡是初始化物件，所以是物件的形式，相當於宣告一個物件
+},{deposits:0,withdrawals:0});*/
+
+/* challenge: transform 'this is a nice title' to
+'This Is a Nice Title'  */
+const converTitleCase = function (title) {
+  let capital = str => str[0].toUpperCase() + str.slice(1);
+  let exception = [
+    'a',
+    'with',
+    'is',
+    'an',
+    'and',
+    'the',
+    'but',
+    'or',
+    'on',
+    'in',
+  ];
+  let ans = title
+    .split(' ')
+    .map(elem => (exception.includes(elem) ? elem : capital(elem)));
+  return capital(ans.join(' ')); //讓第一個詞的首字母大寫
+};
+console.log(converTitleCase('and here is another title with an example'));

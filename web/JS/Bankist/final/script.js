@@ -730,21 +730,10 @@ Eating an okay amount means the dog's current food portion is within a range 10%
 6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
 7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
 8. Create a shallow copy of the dogs array and sort it by recommended food portion in an ascending order (keep in mind that the portions are inside the array's objects)
-
 HINT 1: Use many different tools to solve these challenges, you can use the summary lecture to choose between them 😉
 HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
-
-TEST DATA:
-const dogs = [
-  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
-  { weight: 8, curFood: 200, owners: ['Matilda'] },
-  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
-  { weight: 32, curFood: 340, owners: ['Michael'] }
-];
-
 GOOD LUCK 😀
 */
-
 /*
 const dogs = [
   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
@@ -800,4 +789,59 @@ console.log(dogs.filter(checkEatingOkay));
 // sort it by recommended food portion in an ascending order [1,2,3]
 const dogsSorted = dogs.slice().sort((a, b) => a.recFood - b.recFood);
 console.log(dogsSorted);
+*/
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+//1.
+for (let i of dogs) {
+  i.recommand = i.weight ** 0.75 * 28;
+}
+//2
+let Sarah_dog = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(Sarah_dog);
+//3,4
+let ownersEatTooMuch = dogs
+  .filter(object => object.curFood > object.recommand * 1.1)
+  .flatMap(elem => elem.owners);
+let ownersEatTooLittle = dogs
+  .filter(dog => dog.curFood < dog.recommand * 0.9)
+  .flatMap(ele => ele.owners);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!`);
+console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!`);
+
+//5
+console.log(dogs.some(dog => dog.curFood === dog.recommand));
+//6-7
+let ok = [];
+console.log(
+  dogs.some(
+    dog =>
+      dog.curFood <= dog.recommand * 1.1 && dog.curFood >= dog.recommand * 0.9
+  )
+);
+ok = [
+  ...dogs
+    .filter(
+      dog =>
+        dog.curFood >= dog.recommand * 0.9 && dog.curFood <= dog.recommand * 1.1
+    )
+    .flatMap(dog => dog.owners),
+];
+console.log(ok);
+//8
+let dog_copy = [];
+dog_copy = [...dogs];
+sorted = dog_copy.sort((a, b) => a.recommand - b.recommand);
+console.log(sorted);
+/*
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
 */

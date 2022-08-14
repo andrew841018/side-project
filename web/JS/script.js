@@ -864,3 +864,110 @@ const converTitleCase = function (title) {
   return capital(ans.join(' ')); //讓第一個詞的首字母大寫
 };
 console.log(converTitleCase('and here is another title with an example'));
+
+// +與Number具有一樣功能
+console.log(+'23' == Number('23'));
+//convert to int
+console.log(Number.parseInt('308px', 10)); //10 base,it will skip px,just return 30
+
+//開根號
+Math.sqrt(100);
+console.log(9 ** (1 / 2));
+//to fiexed
+console.log((2.3333).toFixed(1)); /* 回傳小數後1位 */
+console.log((2.8).toFixed(0)); /* 回傳小數後0位 */
+/* big integer */
+//下面這種表示法有個限制：底線不能放在小數點前後，也不能放在第一個字元之前or最後一個字元之後
+let bigint = 34333_0000_0000_0000; // js會自動忽略底線，為了可讀性，可以用左側方式表示大數
+console.log(bigint);
+console.log(4888888888888888888n); //數字後面＋n代表轉換成bigint,與bigint(number)用途一樣
+test = 344444444444444n * 2232348888888888888888444444444444n;
+console.log(test >= 15); //ok-->因為>=會強制轉型，將15轉成bigint
+console.log(20n === 20); //false,因為===不會做強制轉型，不同data type之間不能做比較＆計算,所以直接判定為不同的東西-->結果會出錯
+/* Math.sqrt(test); //error,不能這麼做  */
+console.log(12n / 4n); //return 3n
+//Date
+day = new Date(); //current day/time
+console.log(new Date(2034, 5, 1, 23, 10, 5)); //year,moth,day,hour,min,second
+console.log(new Date('December 23,2019')); //Date可以抓取部分字串直接幫你判斷出當下時間日期資訊
+console.log(day.getFullYear()); //year
+console.log(day.getMonth()); //month(0~11)
+console.log(day.getDate()); //day of month
+console.log(day.getDay()); //day of week(0~6)
+console.log(day.getHours()); //hour
+console.log(day.getMinutes()); //min
+console.log(day.getSeconds()); //sec
+console.log(day.getTime()); //經過的毫秒數
+console.log(Date.now()); //當下時間經過的毫秒數
+console.log(new Date(Date.now())); //可利用毫秒數直接抓出當下時間
+//Date to String
+//toISOString();
+
+//  *****  Date format  ********
+//experimenting api
+
+//current Date & time
+let now = new Date();
+//format
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  weekday: 'long', //long:所有內容都會印出
+};
+//將now,以navigator.language的方式呈現，呈現所涵蓋的內容定義在options
+document.querySelector('h2').textContent = new Intl.DateTimeFormat(
+  //當前瀏覽器所屬的國家(英國＆法國．．．)
+  navigator.language,
+  options //這行可有可無
+).format(now);
+document.querySelector('h2').classList.add('color');
+//timer
+
+/* 前面的參數給多少個（obj1,obj2)後面就要有對應的字串（'andrew','Tim')數量，3000代表的是等待時間（毫秒）
+，時間一到，js會自動呼叫setTimeout這個function */
+arr = ['andrew', 'Tim'];
+let pizza = setTimeout(
+  (obj1, obj2) => console.log(`Here is your pizza with ${obj1} and ${obj2} 🍕`),
+  3000,
+  'andrew', //這裡也可以用...arr 來表示
+  'Tim'
+);
+clearTimeout(pizza); //disable Timeout因此SetTimeout function不會執行
+//SetTimeout
+
+//每一秒執行一次，模擬時鐘
+setInterval(function () {
+  let now = new Date();
+  console.log(now);
+}, 1000 * 60 * 60);
+//可將function套入setInterval,指定function就會反覆執行
+
+/*
+setInterval(function_name,1000);
+*/
+// document.head會印出整個head的html code，body,h1,h2....也是
+
+//專門用於button element,會儲存button相關資訊，"button"不是class name
+//且getElementsByTagName會自動更新資訊，querySelectorAll不會
+document.getElementsByTagName('button');
+//修改＆新增
+let message = document.createElement('div');
+message.classList.add('cookie');
+message.innerHTML = `We use cookied for improved functionality and analytics. <button class="btn">Got it!</button>`;
+let head = document.querySelector('body');
+head.style.color = '#fff';
+head.style.fontSize = '26px';
+message.style.margin = '80px';
+head.prepend(message); //將message放到head的上方
+head.append(message.cloneNode(true)); //將message放到head的下方，與head.append(message)同樣功用
+//CSS 中的before,after
+/*
+head.before(message);
+head.after(message);*/
+
+/* set property */
+//更改某個class property
+//document.documentElement.style.setProperty('class_name','some property(ex:color...)');

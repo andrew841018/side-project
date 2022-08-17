@@ -708,6 +708,8 @@ arr.forEach(function (content, i, arr) {
     console.log(`oh no ${i} ${content}`);
   }
 });
+/* Hint: when using bind or this,using arrow function too,because normal
+function will change this value somehow....(like undefined) */
 //foreach use in map & set
 //for map=>key=index,value=content
 //for set,because there is no index & content
@@ -971,3 +973,137 @@ head.after(message);*/
 /* set property */
 //更改某個class property
 //document.documentElement.style.setProperty('class_name','some property(ex:color...)');
+
+// ***   attribute  ***//
+//可透過下面方式，直接存取到class attribute
+let logo = document.querySelector('body');
+//logo.alt = 'alt';
+//logo.src = 'src';
+//logo.className;
+
+//Non-standart(自定義的attribute)
+
+//logo.designer; //error
+//logo.getAttribute('designer'); //ok
+/* Date attribute
+以下作法的條件:
+1. html中，要有一個property name叫做data-?,?可以是任何字元，但前面必須是data-
+2.假設定義的property name叫做：data-designer,那存取方式就會像下面。
+如果 data-designer="John"
+那下面這行就能夠抓取到John
+logo.dataset.designer; //collect designer=>attribute info store into dataset
+
+//classes
+/*
+logo.classList.add('', '');
+logo.classList.remove('');
+logo.classList.toggle('');
+logo.classList.contains('');
+*/
+//Don't use=>don't overwrite class name
+
+//logo.className = 'jonas';
+
+//scrolling
+
+document.documentElement.clientHeight; //可看到的長
+document.documentElement.clientWidth; //可看到的寬
+let coords = document.querySelector('body').getBoundingClientRect(); //獲取body的座標相關資訊（x,y,top,bottom...)
+
+//  ** getBoundingClientRect  **
+/* 
+coords.height=>元素的height+padding
+coords.width=>元素的width+padding
+
+x=left->from element left to the end(viewport left end)
+y=top->from element top to the viewport top
+bottom->from element bottom to the viewport top
+right->from element right side to the viewport left end
+因此viewport的left/right/top/bottom end會根據視窗大小而有所變動，切記！
+
+*/
+//window.scrollTo(x_coord,y_coord); scroll to (x_coord,y_coord)
+
+/*
+window.scrollTo({
+    left: coord.left + window.pageXOffset, //window.pageXOffset=viewport left~頁面最左端的距離（使用者看不到的長度）
+    top: coord.top + window.pageYOffset, //window.pageYOffset=viewport top~頁面最上面的距離（使用者看不到的部分長度）
+    behavior: 'smooth',//js define smooth speed
+  });
+因此上面的方式可以直接讓頁面跳轉到指定的絕對位置，因為
+將『使用者看到的部分』＋『看不到的部分』=實際的座標
+
+//modern way
+logo.scrollIntoView({behavior:'smooth'});//the rest js will auto calculate...
+
+btn.addEventListener('click',function(e){
+  //in here--->e.target=btn
+});
+*/
+
+/* add and remove event listener */
+let h1 = document.querySelector('body');
+let alert_ = function (e) {
+  //alert('addEvent Listener');
+  h1.removeEventListener('mouseenter', alert_); //remove listener
+};
+//mouseenter-->when hover,altert!
+h1.addEventListener('mouseenter', alert_); //add listener
+
+// Event
+/*
+e.target->當前事件（比如說某個button)
+e.currentTarget->事件監聽者（也就是this)
+e.stopPropagation();//停止事件
+*/
+//the last argument=true-->capture(往下傳)，false-->bubble(往回傳)
+document.querySelector('h1').addEventListener('click', function (e) {}, true);
+h1.children; //list all h1 child element
+h1.firstElementChild; //first child
+h1.lastElementChild; //last child
+h1.parentElement; //parent
+h1.closest('.header'); //h1的parent中，最近的class header(header is class name)
+h1.closest('h1'); //h1的parent中，最近的h1......就是h1自己，沒別人了
+
+//sibling 兄弟姐妹
+h1.previousSibling; //上一個兄弟
+h1.nextSibling; //下一個兄弟
+h1.parentElement.children; //父親的小孩-->所有兄弟
+
+//deal with other sibling
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) {
+    //not myself-->other sibling
+    //do something
+  }
+});
+
+//當條件（condition)滿足，會呼叫這個function
+const obsCallback = function (entries, observer) {
+  //observer->second argument=>可有可無，需要時再指定
+  entries.forEach(entry => {
+    entry.isIntersecting; //可用於判斷當前狀態是否符合條件
+    //符合的話Intersecting=true,反之=false
+  });
+};
+//root,threshold這兩個變數名稱是固定的，不能更改
+const condition = {
+  //when root=null && threshold==0 || threshold==0.2就呼叫function
+  root: null,
+  threshold: [0, 0.2], //當完全看不見element & 當elemnt超過頁面的10%會做一些事
+};
+//using IntersectionObserver implement sticky class
+//sticky class=>往下滑到某個地方，Nav bar(最上一列)會附在頁面最上方呈現半透明狀態
+const observer = new IntersectionObserver(obsCallback, condition);
+//observer element logo
+observer.observe(logo);
+observer.unobserve(logo); //stop obeserve
+
+//advance class
+
+//img[data-src]-->可以在img宣告一個data-src，在透過左側方是取得img的data-src值
+
+//下面這種作法是透過class:dots__dot去存取該class內定義的data-slide property
+//由於該class有多個data-slide value，因此後面會給定要存取的data-slide value,
+//這樣js才知道要抓取哪個element
+//document.querySelector(.dots__dot[data-slide="${slide}"]);

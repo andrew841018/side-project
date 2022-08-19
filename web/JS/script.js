@@ -544,7 +544,7 @@ arr2 = [...hour.values()]; //return each  value(content)
 let str1 = 'I will become best software engineer';
 let index = str1.indexOf('s'); //the first "s" index
 index = str1.lastIndexOf('r'); //the last "r" index
-let substr = str1.slice(7); //from "become"(index 7) to the end
+let substr = str1.(7); //from "become"(index 7) to the end
 str1.slice(4, 7); //extract str1 index 4~6
 console.log(str1.slice(-9)); //從最後面開始算，抓取9個字元
 console.log(str1.slice(1, -3)); //一樣從index 1開始，但最後面3個字元不會被抓取

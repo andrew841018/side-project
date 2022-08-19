@@ -235,7 +235,7 @@ for (i = 0; i < 10; i++) {
 console.log('average:\n ');
 console.log(avg(totals), avg(tip));
 // 取消註解：command + 『\』
-// label  //
+// label  // 
 /*Bug
 can wait 
 fixed

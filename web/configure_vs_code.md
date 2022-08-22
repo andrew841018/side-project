@@ -10,3 +10,4 @@
 8. download parcel-->npm i parcel --save-dev
 9. npm init
 10. npm i parcel@2
+11. npm i core-js regenerator-runtime

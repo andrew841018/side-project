@@ -7,4 +7,6 @@
 5. install Live Server
 6. 在 terminal 輸入『sudo npm install live-server -g』
 7. open terminal input:live-server,then it will reload automaticlly if we change code
-8.
+8. download parcel-->npm i parcel --save-dev
+9. npm init
+10. npm i parcel@2

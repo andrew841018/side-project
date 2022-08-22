@@ -235,7 +235,7 @@ for (i = 0; i < 10; i++) {
 console.log('average:\n ');
 console.log(avg(totals), avg(tip));
 // 取消註解：command + 『\』
-// label  // 
+// label  //
 /*Bug
 can wait 
 fixed
@@ -428,6 +428,8 @@ console.log(null && 23); //return null，因為看到null就沒必要再往下�
 //nullish:只將null & undefined認為false,其餘都是true(0也是)
 //除了false的定義以外其餘和or幾乎一樣
 let a3 = 0;
+//?? purpose:if variable is not assign,assign new value otherwise,
+//keep the original value.
 let test = a3 ?? 10; //a3=0,so return 0
 let a4;
 test = a4 ?? 10; //a4 undefined,so return 10;
@@ -544,7 +546,7 @@ arr2 = [...hour.values()]; //return each  value(content)
 let str1 = 'I will become best software engineer';
 let index = str1.indexOf('s'); //the first "s" index
 index = str1.lastIndexOf('r'); //the last "r" index
-let substr = str1.(7); //from "become"(index 7) to the end
+let substr = str1.slice(7); //from "become"(index 7) to the end
 str1.slice(4, 7); //extract str1 index 4~6
 console.log(str1.slice(-9)); //從最後面開始算，抓取9個字元
 console.log(str1.slice(1, -3)); //一樣從index 1開始，但最後面3個字元不會被抓取
@@ -1107,3 +1109,31 @@ observer.unobserve(logo); //stop obeserve
 //由於該class有多個data-slide value，因此後面會給定要存取的data-slide value,
 //這樣js才知道要抓取哪個element
 //document.querySelector(.dots__dot[data-slide="${slide}"]);
+
+//protect object element from modify--->類似const
+//雖然是這樣，但也只能保護第一層，programmer還是能夠修改第二層（含）以下的內容
+Object.freeze();
+
+/*  principle
+1. don't change any outside variable in function(use pure function-no side effect)
+2. not change original(ex:create a new array instead of modify origin array)
+*/
+const obj = {
+  time: {
+    John: '12:00',
+    Cindy: '1300',
+    Andrew: '01-18',
+  },
+  day: '4',
+  status: 'good',
+};
+//destruct time from object obj,so time=obj['time]
+//其餘也是一樣
+let { time } = obj;
+console.log(time);
+//modify time--->the only one way
+time = {
+  John: time.John,
+  Cindy: time.Cindy,
+  Andrew: '0000',
+};

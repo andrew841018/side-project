@@ -1,0 +1,17 @@
+{
+  "name": "17-modern-js-modules-tooling",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "parcel": "^1.12.4",
+    "regenerator-runtime": "^0.13.7"
+  }
+}

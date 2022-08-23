@@ -29,5 +29,6 @@ const controlRecipe = async function () {
     console.log(err);
   }
 };
+controlRecipe();
 //當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
 ['hashchange', 'load'].forEach(ev => addEventListener(ev, controlRecipe));

@@ -1,4 +1,7 @@
 import icon from '../../img/icons.svg';
+//need to download from github (os:shit)
+import { Fraction } from 'fractional';
+console.log(new Fraction(12, 6).toString());
 /* 
 js在使用圖片時，由於parcel的關係，會根據原圖自動生成另一個圖檔提供js使用
 ,而非原本我們提供的，這裡就是去抓取實際使用圖檔的路徑
@@ -89,18 +92,7 @@ class RecipeView {
         <div class="recipe__ingredients">
         <h2 class="heading--2">Recipe ingredients</h2>
         <ul class="recipe__ingredient-list">${this.#data.ingredients
-          .map(ing => {
-            return ` <li class="recipe__ingredient">
-            <svg class="recipe__icon">
-            <use href=${icons}#icon-check"></use>
-            </svg>
-            <div class="recipe__quantity">${ing.quantity}</div>
-            <div class="recipe__description">
-            <span class="recipe__unit">${ing.unit}</span>
-            ${ing.description}
-            </div>
-        </li>`;
-          })
+          .map(this.#generateMarkupIngredient)
           .join('')}
         </div>
 
@@ -124,6 +116,20 @@ class RecipeView {
             </svg>
         </a>
         </div>`;
+  }
+  #generateMarkupIngredient(ing) {
+    return ` <li class="recipe__ingredient">
+            <svg class="recipe__icon">
+            <use href=${icons}#icon-check"></use>
+            </svg>
+            <div class="recipe__quantity">${
+              ing.quantity ? new Fraction(ing.quantity).toString() : ''
+            }</div>
+            <div class="recipe__description">
+            <span class="recipe__unit">${ing.unit}</span>
+            ${ing.description}
+            </div>
+        </li>`;
   }
 }
 export default new RecipeView();

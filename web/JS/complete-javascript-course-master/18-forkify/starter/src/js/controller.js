@@ -2,18 +2,15 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import * as model from './model.js';
 import recipeView from './view/recipeView.js';
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
+import searchView from './view/searchView.js';
+import resultView from './view/resultView.js';
 
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
-
+if (module.hot) {
+  module.hot.accept();
+}
 const controlRecipe = async function () {
   try {
     //get the hash value of current location
@@ -24,11 +21,31 @@ const controlRecipe = async function () {
     await model.loadRecipe(id);
     //2) Rendering recipe
     //put object to render function
+    //因為繼承的關係，我們能夠直接在這裡使用render
+    console.log(model.state.recipe);
     recipeView.render(model.state.recipe);
   } catch (err) {
-    console.log(err);
+    recipeView.renderError();
   }
 };
-controlRecipe();
-//當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
-['hashchange', 'load'].forEach(ev => addEventListener(ev, controlRecipe));
+const controlSearchResults = async function () {
+  try {
+    //1) get search query
+    const query = searchView.getQuery();
+    searchView.clearInput();
+    if (!query) return;
+    //2)
+    await model.loadSearchResult(query);
+    console.log(model.state);
+    //3) Render result
+    resultView.render(model.state.search.results);
+    console.log('s');
+  } catch (err) {
+    console.error(err);
+  }
+};
+const init = function () {
+  recipeView.addHandleRender(controlRecipe);
+  searchView.addHandlerSearch(controlSearchResults);
+};
+init();

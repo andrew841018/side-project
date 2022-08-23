@@ -15876,13 +15876,104 @@ try {
   }
 }
 
-},{}],"src/js/model.js":[function(require,module,exports) {
+},{}],"src/js/config.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.state = exports.loadRecipe = void 0;
+exports.TIMEOUT_SEC = exports.API_URL = void 0;
+var API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
+exports.API_URL = API_URL;
+var TIMEOUT_SEC = 10;
+exports.TIMEOUT_SEC = TIMEOUT_SEC;
+},{}],"src/js/helper.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getJSON = void 0;
+
+var _config = require("./config.js");
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var timeout = function timeout(s) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error("Request took too long! Timeout after ".concat(s, " second")));
+    }, s * 1000);
+  });
+};
+
+var getJSON = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(url) {
+    var fetchUrl, res, data;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            //(1)loading recipe
+            fetchUrl = fetch(url);
+            _context.next = 4;
+            return Promise.race([fetchUrl, timeout(_config.TIMEOUT_SEC)]);
+
+          case 4:
+            res = _context.sent;
+            data = res.json();
+
+            if (res.ok) {
+              _context.next = 8;
+              break;
+            }
+
+            throw new Error("".concat(data.message, "  ").concat(res.status));
+
+          case 8:
+            return _context.abrupt("return", data);
+
+          case 11:
+            _context.prev = 11;
+            _context.t0 = _context["catch"](0);
+            //so we can catch this error in model.js=>we will know where the bug is.
+            console.log("(helper.js)".concat(_context.t0));
+            throw _context.t0;
+
+          case 15:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 11]]);
+  }));
+
+  return function getJSON(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+exports.getJSON = getJSON;
+},{"./config.js":"src/js/config.js"}],"src/js/model.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.state = exports.loadSearchResult = exports.loadRecipe = void 0;
+
+var _regeneratorRuntime2 = require("regenerator-runtime");
+
+var _config = require("./config.js");
+
+var _helper = require("./helper.js");
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -15893,39 +15984,28 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var state = {
-  recipe: {}
+  recipe: {},
+  search: {
+    query: '',
+    results: []
+  }
 };
 exports.state = state;
 
 var loadRecipe = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
-    var res, data, recipe;
+    var data, recipe;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return fetch("https://forkify-api.herokuapp.com/api/v2/recipes/".concat(id));
+            return (0, _helper.getJSON)("".concat(_config.API_URL, "/").concat(id));
 
           case 3:
-            res = _context.sent;
-            _context.next = 6;
-            return res.json();
-
-          case 6:
             data = _context.sent;
-
-            if (res.ok) {
-              _context.next = 9;
-              break;
-            }
-
-            throw new Error("".concat(data.message, "  ").concat(res.status));
-
-          case 9:
-            console.log(data); //destruct data.data object,get recipt property direct assign to recipt
-
+            //destruct data.data object,get recipt property direct assign to recipt
             recipe = data.data.recipe; //change object property name(ex:image_url->image...)
 
             state.recipe = {
@@ -15938,20 +16018,21 @@ var loadRecipe = /*#__PURE__*/function () {
               cookingTime: recipe.cooking_time,
               ingredients: recipe.ingredients
             };
-            _context.next = 17;
+            _context.next = 12;
             break;
 
-          case 14:
-            _context.prev = 14;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
-            console.log("model.js_error:".concat(_context.t0));
+            console.log("(model.js)".concat(_context.t0));
+            throw _context.t0;
 
-          case 17:
+          case 12:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 14]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function loadRecipe(_x) {
@@ -15960,7 +16041,53 @@ var loadRecipe = /*#__PURE__*/function () {
 }();
 
 exports.loadRecipe = loadRecipe;
-},{}],"src/img/icons.svg":[function(require,module,exports) {
+
+var loadSearchResult = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(query) {
+    var data;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return (0, _helper.getJSON)("".concat(_config.API_URL, "?search=").concat(query));
+
+          case 3:
+            data = _context2.sent;
+            state.search.results = data.data.recipes.map(function (rec) {
+              return {
+                id: rec.id,
+                title: rec.title,
+                publisher: rec.publisher,
+                image: rec.image_url
+              };
+            });
+            _context2.next = 11;
+            break;
+
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](0);
+            console.log("(model.js)".concat(_context2.t0));
+            throw _context2.t0;
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+
+  return function loadSearchResult(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.loadSearchResult = loadSearchResult;
+loadSearchResult('pizza');
+},{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helper.js":"src/js/helper.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"node_modules/fractional/index.js":[function(require,module,exports) {
 'use strict';
@@ -16403,7 +16530,97 @@ Fraction.prototype.snap = function(max, threshold) {
 if(typeof module !== "undefined")
     module.exports.Fraction = Fraction
 
-},{}],"src/js/view/recipeView.js":[function(require,module,exports) {
+},{}],"src/js/view/View.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var icons = new URL('../img/icons.svg', import.meta.url);
+icons = icons.href.replace('/img/icons.svg', _icons.default);
+
+var View = /*#__PURE__*/function () {
+  function View() {
+    _classCallCheck(this, View);
+
+    _defineProperty(this, "_data", void 0);
+
+    _defineProperty(this, "_message", '');
+
+    _defineProperty(this, "_errorMessage", "we couldn't find recipe, please try another one");
+
+    _defineProperty(this, "_parentEl", document.querySelector('.recipe'));
+  }
+
+  _createClass(View, [{
+    key: "render",
+    value: function render(data) {
+      this._data = data;
+      console.log(this);
+
+      var markup = this._generateMarkup();
+
+      this._clear();
+
+      this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    } //public because controller will need it.
+
+  }, {
+    key: "renderSpinner",
+    value: function renderSpinner() {
+      var markup = "\n    <div class=\"spinner\">\n      <svg>\n        <use href=\"".concat(icons, "#icon-loader\"></use>\n      </svg>\n    </div>");
+
+      this._clear();
+
+      this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+  }, {
+    key: "renderError",
+    value: function renderError() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this._errorMessage;
+      var markup = "<div class=\"error\">\n    <div>\n      <svg>\n        <use href=\"".concat(icons, "#icon-alert-triangle\"></use>\n      </svg>\n    </div>\n    <p>").concat(message, "</p>\n  </div>");
+
+      this._clear();
+
+      this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+  }, {
+    key: "renderMessage",
+    value: function renderMessage() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this._message;
+      var markup = "<div class=\"message\">\n    <div>\n      <svg>\n        <use href=\"".concat(icons, "#icon-smile\"></use>\n      </svg>\n    </div>\n    <p>").concat(message, "</p>\n  </div>");
+
+      this._clear();
+
+      this._parentEl.insertAdjacentHTML('afterbegin', markup);
+    }
+  }, {
+    key: "_clear",
+    value: function _clear() {
+      //inner HTML will overwrite previous content
+      this._parentEl.innerHTML = '';
+    }
+  }]);
+
+  return View;
+}();
+
+exports.default = View;
+},{"../../img/icons.svg":"src/img/icons.svg"}],"src/js/view/recipeView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16415,7 +16632,11 @@ var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 
 var _fractional = require("fractional");
 
+var _View2 = _interopRequireDefault(require("./View.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16423,27 +16644,20 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classPrivateMethodInitSpec(obj, privateSet) { _checkPrivateRedeclaration(obj, privateSet); privateSet.add(obj); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
-
-function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
-
-function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
-
-console.log(new _fractional.Fraction(12, 6).toString());
 /* 
 js在使用圖片時，由於parcel的關係，會根據原圖自動生成另一個圖檔提供js使用
 ,而非原本我們提供的，這裡就是去抓取實際使用圖檔的路徑
@@ -16451,82 +16665,177 @@ js在使用圖片時，由於parcel的關係，會根據原圖自動生成另一
 //special solution by Angelica(not jonas version)
 //combine of jonas version
 //anyway the format should be "http://localhost:XXXX(fill yours)/icons.XXXX(fill yours).svg"
-
 var icons = new URL('../img/icons.svg', import.meta.url);
 icons = icons.href.replace('/img/icons.svg', _icons.default);
 
-var _data = /*#__PURE__*/new WeakMap();
+var RecipeView = /*#__PURE__*/function (_View) {
+  _inherits(RecipeView, _View);
 
-var _parentEl = /*#__PURE__*/new WeakMap();
+  var _super = _createSuper(RecipeView);
 
-var _clear = /*#__PURE__*/new WeakSet();
-
-var _generateMarkup = /*#__PURE__*/new WeakSet();
-
-var _generateMarkupIngredient = /*#__PURE__*/new WeakSet();
-
-var RecipeView = /*#__PURE__*/function () {
   function RecipeView() {
     _classCallCheck(this, RecipeView);
 
-    _classPrivateMethodInitSpec(this, _generateMarkupIngredient);
-
-    _classPrivateMethodInitSpec(this, _generateMarkup);
-
-    _classPrivateMethodInitSpec(this, _clear);
-
-    _classPrivateFieldInitSpec(this, _data, {
-      writable: true,
-      value: void 0
-    });
-
-    _classPrivateFieldInitSpec(this, _parentEl, {
-      writable: true,
-      value: document.querySelector('.recipe')
-    });
-
-    _defineProperty(this, "renderSpinner", function () {
-      var markup = "\n    <div class=\"spinner\">\n      <svg>\n        <use href=\"".concat(icons, "#icon-loader\"></use>\n      </svg>\n    </div>");
-      _classPrivateFieldGet(this, _parentEl).innerHTML = '';
-
-      _classPrivateFieldGet(this, _parentEl).insertAdjacentHTML('afterbegin', markup);
-    });
+    return _super.apply(this, arguments);
   }
 
   _createClass(RecipeView, [{
-    key: "render",
-    value: function render(data) {
-      _classPrivateFieldSet(this, _data, data);
-
-      var markup = _classPrivateMethodGet(this, _generateMarkup, _generateMarkup2).call(this);
-
-      _classPrivateMethodGet(this, _clear, _clear2).call(this);
-
-      _classPrivateFieldGet(this, _parentEl).insertAdjacentHTML('afterbegin', markup);
-    } //public because controller will need it.
-
+    key: "_generateMarkup",
+    value: function _generateMarkup() {
+      console.log('gogog');
+      return "\n      <figure class=\"recipe__fig\">\n        <img src=\"".concat(this._data.image, "\" alt=\"").concat(this._data.title, "\" class=\"recipe__img\" />\n        <h1 class=\"recipe__title\">\n          <span>").concat(this._data.title, "</span>\n        </h1>\n      </figure>\n\n      <div class=\"recipe__details\">\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-clock\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--minutes\">").concat(this._data.cookingTime, "</span>\n          <span class=\"recipe__info-text\">minutes</span>\n        </div>\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-users\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--people\">").concat(this._data.servings, "</span>\n          <span class=\"recipe__info-text\">servings</span>\n\n          <div class=\"recipe__info-buttons\">\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings - 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-minus-circle\"></use>\n              </svg>\n            </button>\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings + 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-plus-circle\"></use>\n              </svg>\n            </button>\n          </div>\n        </div>\n        <button class=\"btn--round btn--bookmark\">\n          <svg class=\"\">\n            <use href=\"").concat(icons, "#icon-bookmark").concat(this._data.bookmarked ? '-fill' : '', "\"></use>\n          </svg>\n        </button>\n      </div>\n\n      <div class=\"recipe__ingredients\">\n        <h2 class=\"heading--2\">Recipe ingredients</h2>\n        <ul class=\"recipe__ingredient-list\">\n          ").concat(this._data.ingredients.map(this._generateMarkupIngredient).join(''), "\n      </div>\n\n      <div class=\"recipe__directions\">\n        <h2 class=\"heading--2\">How to cook it</h2>\n        <p class=\"recipe__directions-text\">\n          This recipe was carefully designed and tested by\n          <span class=\"recipe__publisher\">").concat(this._data.publisher, "</span>. Please check out\n          directions at their website.\n        </p>\n        <a\n          class=\"btn--small recipe__btn\"\n          href=\"").concat(this._data.sourceUrl, "\"\n          target=\"_blank\"\n        >\n          <span>Directions</span>\n          <svg class=\"search__icon\">\n            <use href=\"").concat(icons, "#icon-arrow-right\"></use>\n          </svg>\n        </a>\n      </div>\n    ");
+    }
+  }, {
+    key: "_generateMarkupIngredient",
+    value: function _generateMarkupIngredient(ing) {
+      return " <li class=\"recipe__ingredient\">\n            <svg class=\"recipe__icon\">\n            <use href=".concat(icons, "#icon-check\"></use>\n            </svg>\n            <div class=\"recipe__quantity\">").concat(ing.quantity ? new _fractional.Fraction(ing.quantity).toString() : '', "</div>\n            <div class=\"recipe__description\">\n            <span class=\"recipe__unit\">").concat(ing.unit, "</span>\n            ").concat(ing.description, "\n            </div>\n        </li>");
+    }
+  }, {
+    key: "addHandleRender",
+    value: function addHandleRender(handler) {
+      //當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
+      ['hashchange', 'load'].forEach(function (ev) {
+        return addEventListener(ev, handler);
+      });
+    }
   }]);
 
   return RecipeView;
-}();
-
-function _clear2() {
-  //inner HTML will overwrite previous content
-  _classPrivateFieldGet(this, _parentEl).innerHTML = '';
-}
-
-function _generateMarkup2() {
-  return "\n        <figure class=\"recipe__fig\">\n        <img src=".concat(_classPrivateFieldGet(this, _data).image, " alt=").concat(_classPrivateFieldGet(this, _data).title, " class=\"recipe__img\" />\n        <h1 class=\"recipe__title\">\n            <span>Pasta with tomato cream sauce</span>\n        </h1>\n        </figure>\n\n        <div class=\"recipe__details\">\n        <div class=\"recipe__info\">\n            <svg class=\"recipe__info-icon\">\n            <use href=").concat(icons, "#icon-clock\"></use>\n            </svg>\n            <span class=\"recipe__info-data recipe__info-data--minutes\">").concat(_classPrivateFieldGet(this, _data).cookingtime, "</span>\n            <span class=\"recipe__info-text\">minutes</span>\n        </div>\n        <div class=\"recipe__info\">\n            <svg class=\"recipe__info-icon\">\n            <use href=").concat(icons, "#icon-users\"></use>\n            </svg>\n            <span class=\"recipe__info-data recipe__info-data--people\">4</span>\n            <span class=\"recipe__info-text\">servings</span>\n\n            <div class=\"recipe__info-buttons\">\n            <button class=\"btn--tiny btn--increase-servings\">\n                <svg>\n                <use href=").concat(icons, "#icon-minus-circle\"></use>\n                </svg>\n            </button>\n            <button class=\"btn--tiny btn--increase-servings\">\n                <svg>\n                <use href=").concat(icons, "#icon-plus-circle\"></use>\n                </svg>\n            </button>\n            </div>\n        </div>\n\n        <div class=\"recipe__user-generated\">\n            <svg>\n            <use href=").concat(icons, "#icon-user\"></use>\n            </svg>\n        </div>\n        <button class=\"btn--round\">\n            <svg class=\"\">\n            <use href=").concat(icons, "#icon-bookmark-fill\"></use>\n            </svg>\n        </button>\n        </div>\n\n        <div class=\"recipe__ingredients\">\n        <h2 class=\"heading--2\">Recipe ingredients</h2>\n        <ul class=\"recipe__ingredient-list\">").concat(_classPrivateFieldGet(this, _data).ingredients.map(_classPrivateMethodGet(this, _generateMarkupIngredient, _generateMarkupIngredient2)).join(''), "\n        </div>\n\n        <div class=\"recipe__directions\">\n        <h2 class=\"heading--2\">How to cook it</h2>\n        <p class=\"recipe__directions-text\">\n            This recipe was carefully designed and tested by\n            <span class=\"recipe__publisher\">").concat(_classPrivateFieldGet(this, _data).publisher, "</span>. Please check out\n            directions at their website.\n        </p>\n        <a\n            class=\"btn--small recipe__btn\"\n            href=").concat(_classPrivateFieldGet(this, _data).sourceUrl, "\n            target=\"_blank\"\n        >\n            <span>Directions</span>\n            <svg class=\"search__icon\">\n            <use href=").concat(icons, "#icon-arrow-right\"></use>\n            </svg>\n        </a>\n        </div>");
-}
-
-function _generateMarkupIngredient2(ing) {
-  return " <li class=\"recipe__ingredient\">\n            <svg class=\"recipe__icon\">\n            <use href=".concat(icons, "#icon-check\"></use>\n            </svg>\n            <div class=\"recipe__quantity\">").concat(ing.quantity ? new _fractional.Fraction(ing.quantity).toString() : '', "</div>\n            <div class=\"recipe__description\">\n            <span class=\"recipe__unit\">").concat(ing.unit, "</span>\n            ").concat(ing.description, "\n            </div>\n        </li>");
-}
+}(_View2.default);
 
 var _default = new RecipeView();
 
 exports.default = _default;
-},{"../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/controller.js":[function(require,module,exports) {
+},{"../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js","./View.js":"src/js/view/View.js"}],"src/js/view/searchView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var SearchView = /*#__PURE__*/function () {
+  function SearchView() {
+    _classCallCheck(this, SearchView);
+
+    _defineProperty(this, "_parentEl", document.querySelector('.search'));
+  }
+
+  _createClass(SearchView, [{
+    key: "getQuery",
+    value: function getQuery() {
+      return this._parentEl.querySelector('.search__field').value;
+    }
+  }, {
+    key: "addHandlerSearch",
+    value: function addHandlerSearch(inputFunction) {
+      this._parentEl.addEventListener('submit', function (e) {
+        e.preventDefault();
+        inputFunction();
+      });
+    }
+  }, {
+    key: "clearInput",
+    value: function clearInput() {
+      this._parentEl.querySelector('.search__field').value = '';
+    }
+  }]);
+
+  return SearchView;
+}();
+
+var _default = new SearchView();
+
+exports.default = _default;
+},{}],"src/js/view/resultView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _View2 = _interopRequireDefault(require("./View.js"));
+
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var icons = new URL('../img/icons.svg', import.meta.url);
+icons = icons.href.replace('/img/icons.svg', _icons.default);
+
+var ReusltView = /*#__PURE__*/function (_View) {
+  _inherits(ReusltView, _View);
+
+  var _super = _createSuper(ReusltView);
+
+  function ReusltView() {
+    var _this;
+
+    _classCallCheck(this, ReusltView);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector('.results'));
+
+    return _this;
+  }
+
+  _createClass(ReusltView, [{
+    key: "_generateMarkup",
+    value: function _generateMarkup() {
+      return this._data.map(this._generateMarkupPreview).join('');
+    }
+  }, {
+    key: "_generateMarkupPreview",
+    value: function _generateMarkupPreview(result) {
+      return "<li class=\"preview\">\n        <a class=\"preview__link\" href=\"#".concat(result.id, "\">\n          <figure class=\"preview__fig\">\n            <img src=\"").concat(result.image, "\" alt=\"").concat(result.title, "\" />\n          </figure>\n          <div class=\"preview__data\">\n            <h4 class=\"preview__title\">").concat(result.title, "</h4>\n            <p class=\"preview__publisher\">").concat(result.publisher, "</p>\n    \n          </div>\n        </a>\n      </li>");
+    }
+  }]);
+
+  return ReusltView;
+}(_View2.default);
+
+var _default = new ReusltView();
+
+exports.default = _default;
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/controller.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/stable");
@@ -16536,6 +16845,10 @@ require("regenerator-runtime/runtime");
 var model = _interopRequireWildcard(require("./model.js"));
 
 var _recipeView = _interopRequireDefault(require("./view/recipeView.js"));
+
+var _searchView = _interopRequireDefault(require("./view/searchView.js"));
+
+var _resultView = _interopRequireDefault(require("./view/resultView.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16551,15 +16864,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var timeout = function timeout(s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error("Request took too long! Timeout after ".concat(s, " second")));
-    }, s * 1000);
-  });
-}; // https://forkify-api.herokuapp.com/v2
+// https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
-
+if (module.hot) {
+  module.hot.accept();
+}
 
 var controlRecipe = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -16589,22 +16898,26 @@ var controlRecipe = /*#__PURE__*/function () {
           case 7:
             //2) Rendering recipe
             //put object to render function
+            //因為繼承的關係，我們能夠直接在這裡使用render
+            console.log(model.state.recipe);
+
             _recipeView.default.render(model.state.recipe);
 
-            _context.next = 13;
+            _context.next = 14;
             break;
 
-          case 10:
-            _context.prev = 10;
+          case 11:
+            _context.prev = 11;
             _context.t0 = _context["catch"](0);
-            console.log(_context.t0);
 
-          case 13:
+            _recipeView.default.renderError();
+
+          case 14:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 10]]);
+    }, _callee, null, [[0, 11]]);
   }));
 
   return function controlRecipe() {
@@ -16612,12 +16925,65 @@ var controlRecipe = /*#__PURE__*/function () {
   };
 }();
 
-controlRecipe(); //當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
+var controlSearchResults = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var query;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            //1) get search query
+            query = _searchView.default.getQuery();
 
-['hashchange', 'load'].forEach(function (ev) {
-  return addEventListener(ev, controlRecipe);
-});
-},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+            _searchView.default.clearInput();
+
+            if (query) {
+              _context2.next = 5;
+              break;
+            }
+
+            return _context2.abrupt("return");
+
+          case 5:
+            _context2.next = 7;
+            return model.loadSearchResult(query);
+
+          case 7:
+            console.log(model.state); //3) Render result
+
+            _resultView.default.render(model.state.search.results);
+
+            console.log('s');
+            _context2.next = 15;
+            break;
+
+          case 12:
+            _context2.prev = 12;
+            _context2.t0 = _context2["catch"](0);
+            console.error(_context2.t0);
+
+          case 15:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 12]]);
+  }));
+
+  return function controlSearchResults() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+var init = function init() {
+  _recipeView.default.addHandleRender(controlRecipe);
+
+  _searchView.default.addHandlerSearch(controlSearchResults);
+};
+
+init();
+},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js","./view/searchView.js":"src/js/view/searchView.js","./view/resultView.js":"src/js/view/resultView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

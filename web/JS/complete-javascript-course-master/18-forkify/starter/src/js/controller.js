@@ -8,13 +8,13 @@ import resultView from './view/resultView.js';
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
-if (module.hot) {
+/*if (module.hot) {
   module.hot.accept();
-}
-const controlRecipe = async function () {
+}*/
+const controlRecipe = async function (id = '#5ed6604591c37cdc054bc886') {
   try {
     //get the hash value of current location
-    const id = window.location.hash.slice(1);
+    id = window.location.hash.slice(1);
     if (!id) return;
     recipeView.renderSpinner();
     //1) Loading recipe
@@ -22,7 +22,6 @@ const controlRecipe = async function () {
     //2) Rendering recipe
     //put object to render function
     //因為繼承的關係，我們能夠直接在這裡使用render
-    console.log(model.state.recipe);
     recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
@@ -38,13 +37,14 @@ const controlSearchResults = async function () {
     await model.loadSearchResult(query);
     console.log(model.state);
     //3) Render result
-    resultView.render(model.state.search.results);
+    resultView.render(model.getSearchResultPage(1));
     console.log('s');
   } catch (err) {
     console.error(err);
   }
 };
 const init = function () {
+  controlRecipe();
   recipeView.addHandleRender(controlRecipe);
   searchView.addHandlerSearch(controlSearchResults);
 };

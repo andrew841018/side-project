@@ -7,8 +7,9 @@ export default class View {
   _errorMessage = "we couldn't find recipe, please try another one";
   _parentEl = document.querySelector('.recipe');
   render(data) {
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderError();
     this._data = data;
-    console.log(this);
     const markup = this._generateMarkup();
     this._clear();
     this._parentEl.insertAdjacentHTML('afterbegin', markup);

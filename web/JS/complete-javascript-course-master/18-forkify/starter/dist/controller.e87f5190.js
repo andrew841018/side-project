@@ -15882,11 +15882,13 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TIMEOUT_SEC = exports.API_URL = void 0;
+exports.TIMEOUT_SEC = exports.RES_PER_PAGE = exports.API_URL = void 0;
 var API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
 exports.API_URL = API_URL;
 var TIMEOUT_SEC = 10;
 exports.TIMEOUT_SEC = TIMEOUT_SEC;
+var RES_PER_PAGE = 10;
+exports.RES_PER_PAGE = RES_PER_PAGE;
 },{}],"src/js/helper.js":[function(require,module,exports) {
 "use strict";
 
@@ -15967,7 +15969,7 @@ exports.getJSON = getJSON;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.state = exports.loadSearchResult = exports.loadRecipe = void 0;
+exports.state = exports.loadSearchResult = exports.loadRecipe = exports.getSearchResultPage = void 0;
 
 var _regeneratorRuntime2 = require("regenerator-runtime");
 
@@ -15987,7 +15989,9 @@ var state = {
   recipe: {},
   search: {
     query: '',
-    results: []
+    results: [],
+    page: 1,
+    resultsPerPage: _config.RES_PER_PAGE
   }
 };
 exports.state = state;
@@ -16086,7 +16090,16 @@ var loadSearchResult = /*#__PURE__*/function () {
 }();
 
 exports.loadSearchResult = loadSearchResult;
-loadSearchResult('pizza');
+
+var getSearchResultPage = function getSearchResultPage() {
+  var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : state.search.page;
+  state.search.page = page;
+  var start = (page - 1) * state.search.resultsPerPage;
+  var end = page * state.search.resultsPerPage;
+  return state.search.results.slice(start, end);
+};
+
+exports.getSearchResultPage = getSearchResultPage;
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helper.js":"src/js/helper.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"node_modules/fractional/index.js":[function(require,module,exports) {
@@ -16569,8 +16582,8 @@ var View = /*#__PURE__*/function () {
   _createClass(View, [{
     key: "render",
     value: function render(data) {
+      if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
       this._data = data;
-      console.log(this);
 
       var markup = this._generateMarkup();
 
@@ -16683,7 +16696,7 @@ var RecipeView = /*#__PURE__*/function (_View) {
     key: "_generateMarkup",
     value: function _generateMarkup() {
       console.log('gogog');
-      return "\n      <figure class=\"recipe__fig\">\n        <img src=\"".concat(this._data.image, "\" alt=\"").concat(this._data.title, "\" class=\"recipe__img\" />\n        <h1 class=\"recipe__title\">\n          <span>").concat(this._data.title, "</span>\n        </h1>\n      </figure>\n\n      <div class=\"recipe__details\">\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-clock\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--minutes\">").concat(this._data.cookingTime, "</span>\n          <span class=\"recipe__info-text\">minutes</span>\n        </div>\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-users\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--people\">").concat(this._data.servings, "</span>\n          <span class=\"recipe__info-text\">servings</span>\n\n          <div class=\"recipe__info-buttons\">\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings - 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-minus-circle\"></use>\n              </svg>\n            </button>\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings + 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-plus-circle\"></use>\n              </svg>\n            </button>\n          </div>\n        </div>\n        <button class=\"btn--round btn--bookmark\">\n          <svg class=\"\">\n            <use href=\"").concat(icons, "#icon-bookmark").concat(this._data.bookmarked ? '-fill' : '', "\"></use>\n          </svg>\n        </button>\n      </div>\n\n      <div class=\"recipe__ingredients\">\n        <h2 class=\"heading--2\">Recipe ingredients</h2>\n        <ul class=\"recipe__ingredient-list\">\n          ").concat(this._data.ingredients.map(this._generateMarkupIngredient).join(''), "\n      </div>\n\n      <div class=\"recipe__directions\">\n        <h2 class=\"heading--2\">How to cook it</h2>\n        <p class=\"recipe__directions-text\">\n          This recipe was carefully designed and tested by\n          <span class=\"recipe__publisher\">").concat(this._data.publisher, "</span>. Please check out\n          directions at their website.\n        </p>\n        <a\n          class=\"btn--small recipe__btn\"\n          href=\"").concat(this._data.sourceUrl, "\"\n          target=\"_blank\"\n        >\n          <span>Directions</span>\n          <svg class=\"search__icon\">\n            <use href=\"").concat(icons, "#icon-arrow-right\"></use>\n          </svg>\n        </a>\n      </div>\n    ");
+      return "\n      <figure class=\"recipe__fig\">\n        <img src=\"".concat(this._data.image, "\" alt=\"").concat(this._data.title, "\" class=\"recipe__img\" />\n        <h1 class=\"recipe__title\">\n          <span>").concat(this._data.title, "</span>\n        </h1>\n      </figure>\n\n      <div class=\"recipe__details\">\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-clock\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--minutes\">").concat(this._data.cookingTime, "</span>\n          <span class=\"recipe__info-text\">minutes</span>\n        </div>\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-users\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--people\">").concat(this._data.servings, "</span>\n          <span class=\"recipe__info-text\">servings</span>\n\n          <div class=\"recipe__info-buttons\">\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings - 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-minus-circle\"></use>\n              </svg>\n            </button>\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings + 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-plus-circle\"></use>\n              </svg>\n            </button>\n          </div>\n        </div>\n\n        <div class=\"recipe__user-generated ").concat(this._data.key ? '' : 'hidden', "\">\n        </div>\n        <button class=\"btn--round btn--bookmark\">\n          <svg class=\"\">\n            <use href=\"").concat(icons, "#icon-bookmark").concat(this._data.bookmarked ? '-fill' : '', "\"></use>\n          </svg>\n        </button>\n      </div>\n\n      <div class=\"recipe__ingredients\">\n        <h2 class=\"heading--2\">Recipe ingredients</h2>\n        <ul class=\"recipe__ingredient-list\">\n          ").concat(this._data.ingredients.map(this._generateMarkupIngredient).join(''), "\n      </div>\n\n      <div class=\"recipe__directions\">\n        <h2 class=\"heading--2\">How to cook it</h2>\n        <p class=\"recipe__directions-text\">\n          This recipe was carefully designed and tested by\n          <span class=\"recipe__publisher\">").concat(this._data.publisher, "</span>. Please check out\n          directions at their website.\n        </p>\n        <a\n          class=\"btn--small recipe__btn\"\n          href=\"").concat(this._data.sourceUrl, "\"\n          target=\"_blank\"\n        >\n          <span>Directions</span>\n          <svg class=\"search__icon\">\n            <use href=\"").concat(icons, "#icon-arrow-right\"></use>\n          </svg>\n        </a>\n      </div>\n    ");
     }
   }, {
     key: "_generateMarkupIngredient",
@@ -16814,6 +16827,10 @@ var ReusltView = /*#__PURE__*/function (_View) {
 
     _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector('.results'));
 
+    _defineProperty(_assertThisInitialized(_this), "_errorMessage", 'No recipe for your query, please try again later 😏');
+
+    _defineProperty(_assertThisInitialized(_this), "_message", '');
+
     return _this;
   }
 
@@ -16866,41 +16883,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 // https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
-if (module.hot) {
-  module.hot.accept();
-}
 
+/*if (module.hot) {
+  module.hot.accept();
+}*/
 var controlRecipe = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var id;
+    var id,
+        _args = arguments;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
+            id = _args.length > 0 && _args[0] !== undefined ? _args[0] : '#5ed6604591c37cdc054bc886';
+            _context.prev = 1;
             //get the hash value of current location
             id = window.location.hash.slice(1);
 
             if (id) {
-              _context.next = 4;
+              _context.next = 5;
               break;
             }
 
             return _context.abrupt("return");
 
-          case 4:
+          case 5:
             _recipeView.default.renderSpinner(); //1) Loading recipe
 
 
-            _context.next = 7;
+            _context.next = 8;
             return model.loadRecipe(id);
 
-          case 7:
+          case 8:
             //2) Rendering recipe
             //put object to render function
             //因為繼承的關係，我們能夠直接在這裡使用render
-            console.log(model.state.recipe);
-
             _recipeView.default.render(model.state.recipe);
 
             _context.next = 14;
@@ -16908,7 +16925,7 @@ var controlRecipe = /*#__PURE__*/function () {
 
           case 11:
             _context.prev = 11;
-            _context.t0 = _context["catch"](0);
+            _context.t0 = _context["catch"](1);
 
             _recipeView.default.renderError();
 
@@ -16917,7 +16934,7 @@ var controlRecipe = /*#__PURE__*/function () {
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 11]]);
+    }, _callee, null, [[1, 11]]);
   }));
 
   return function controlRecipe() {
@@ -16952,7 +16969,7 @@ var controlSearchResults = /*#__PURE__*/function () {
           case 7:
             console.log(model.state); //3) Render result
 
-            _resultView.default.render(model.state.search.results);
+            _resultView.default.render(model.getSearchResultPage(1));
 
             console.log('s');
             _context2.next = 15;
@@ -16977,6 +16994,8 @@ var controlSearchResults = /*#__PURE__*/function () {
 }();
 
 var init = function init() {
+  controlRecipe();
+
   _recipeView.default.addHandleRender(controlRecipe);
 
   _searchView.default.addHandlerSearch(controlSearchResults);
@@ -17011,7 +17030,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59123" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55296" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

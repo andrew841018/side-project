@@ -53,4 +53,31 @@ export default class View {
     //inner HTML will overwrite previous content
     this._parentEl.innerHTML = '';
   }
+  update(data) {
+    this._data = data;
+    //new html-->after update
+    const newMarkup = this._generateMarkup();
+    //createRange->針對某部分html內容做修改
+    //createContextualFragment-->直接將html code當成input放入
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newEl = Array.from(newDOM.querySelectorAll('*')); //multi element-->array(because select all)
+    const curEl = Array.from(this._parentEl.querySelectorAll('*')); //multi element-->array(because select all)
+    newEl.forEach((newElem, i) => {
+      const currentEl = curEl[i];
+      //nodevalue return null if there is not text, otherwise return string
+      //Update changed TEXT
+      if (
+        !newElem.isEqualNode(currentEl) &&
+        newElem.firstChild?.nodeValue.trim() !== ''
+      ) {
+        //
+        currentEl.textContent = newElem.textContent;
+      }
+      //update changed Attributed
+      if (!newElem.isEqualNode(currentEl))
+        Array.from(newElem.attributes).forEach(attr => {
+          currentEl.setAttribute(attr.name, attr.value);
+        });
+    });
+  }
 }

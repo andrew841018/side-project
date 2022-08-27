@@ -4,19 +4,22 @@ import * as model from './model.js';
 import recipeView from './view/recipeView.js';
 import searchView from './view/searchView.js';
 import resultView from './view/resultView.js';
-
+import pageinationView from './view/pageinationView.js';
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
 /*if (module.hot) {
   module.hot.accept();
 }*/
-const controlRecipe = async function (id = '#5ed6604591c37cdc054bc886') {
+const controlRecipe = async function (e) {
   try {
-    //get the hash value of current location
-    id = window.location.hash.slice(1);
+    //get the hash value of 網址列
+    const id = window.location.hash.slice(1);
     if (!id) return;
-    recipeView.renderSpinner();
+    if (e['type'] !== 'hashchange') recipeView.renderSpinner();
+    //0) Update results view to mark selected search result
+    resultView.update(model.getSearchResultPage());
+    //e['type']
     //1) Loading recipe
     await model.loadRecipe(id);
     //2) Rendering recipe
@@ -29,23 +32,37 @@ const controlRecipe = async function (id = '#5ed6604591c37cdc054bc886') {
 };
 const controlSearchResults = async function () {
   try {
+    resultView.renderSpinner();
     //1) get search query
     const query = searchView.getQuery();
     searchView.clearInput();
     if (!query) return;
     //2)
     await model.loadSearchResult(query);
-    console.log(model.state);
     //3) Render result
-    resultView.render(model.getSearchResultPage(1));
-    console.log('s');
+    resultView.render(model.getSearchResultPage());
+    //4) Render initial pagination button
+    pageinationView.render(model.state.search);
   } catch (err) {
     console.error(err);
   }
 };
+const controlPagination = function (goToPage) {
+  //1) Render NEW results
+  resultView.render(model.getSearchResultPage(goToPage)); //it will update model.state.search too
+  //2)Render NEW pagination buttons
+  pageinationView.render(model.state.search);
+};
+const controlServings = function (servings) {
+  //update the recipe servings(in state)
+  model.updateServing(servings);
+  //update the recipe view
+  recipeView.update(model.state.recipe);
+};
 const init = function () {
-  controlRecipe();
   recipeView.addHandleRender(controlRecipe);
+  recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
+  pageinationView.addHandlerClick(controlPagination);
 };
 init();

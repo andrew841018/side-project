@@ -992,9 +992,14 @@ let logo = document.querySelector('body');
 1. html中，要有一個property name叫做data-?,?可以是任何字元，但前面必須是data-
 2.假設定義的property name叫做：data-designer,那存取方式就會像下面。
 如果 data-designer="John"
-那下面這行就能夠抓取到John
-logo.dataset.designer; //collect designer=>attribute info store into dataset
-
+那這幾種方式就能夠抓取到John
+1. logo.dataset.designer; //collect designer=>attribute info store into dataset
+2. const {designer}=logo.dataset;//類似object抓取方式
+此外，如果在html中，property name叫做data-software-Engineer='John';
+那存取時，可直接：
+1. logo.dataset.softwareEngineeer;//normal way
+2. const {softewareEngineer}=logo.dataset;//object way
+簡而言之，data後面的『-』可直接省略
 //classes
 /*
 logo.classList.add('', '');

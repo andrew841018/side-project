@@ -13,7 +13,6 @@ let icons = new URL('../img/icons.svg', import.meta.url);
 icons = icons.href.replace('/img/icons.svg', icon);
 class RecipeView extends View {
   _generateMarkup() {
-    console.log('gogog');
     return `
       <figure class="recipe__fig">
         <img src="${this._data.image}" alt="${
@@ -117,6 +116,15 @@ class RecipeView extends View {
   addHandleRender(handler) {
     //當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
     ['hashchange', 'load'].forEach(ev => addEventListener(ev, handler));
+  }
+  addHandlerUpdateServings(inputFunction) {
+    this._parentEl.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--tiny');
+      if (!btn) return;
+      const { updateTo } = btn.dataset;
+      if (+updateTo <= 0) return;
+      inputFunction(+updateTo);
+    });
   }
 }
 export default new RecipeView();

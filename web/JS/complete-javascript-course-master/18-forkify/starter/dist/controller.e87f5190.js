@@ -15969,7 +15969,7 @@ exports.getJSON = getJSON;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.state = exports.loadSearchResult = exports.loadRecipe = exports.getSearchResultPage = void 0;
+exports.updateServing = exports.state = exports.loadSearchResult = exports.loadRecipe = exports.getSearchResultPage = void 0;
 
 var _regeneratorRuntime2 = require("regenerator-runtime");
 
@@ -16100,6 +16100,15 @@ var getSearchResultPage = function getSearchResultPage() {
 };
 
 exports.getSearchResultPage = getSearchResultPage;
+
+var updateServing = function updateServing(newServing) {
+  state.recipe.ingredients.forEach(function (ing) {
+    ing.quantity = ing.quantity * newServing / state.recipe.servings;
+  });
+  state.recipe.servings = +newServing;
+};
+
+exports.updateServing = updateServing;
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helper.js":"src/js/helper.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"node_modules/fractional/index.js":[function(require,module,exports) {
@@ -16627,6 +16636,37 @@ var View = /*#__PURE__*/function () {
       //inner HTML will overwrite previous content
       this._parentEl.innerHTML = '';
     }
+  }, {
+    key: "update",
+    value: function update(data) {
+      this._data = data; //new html-->after update
+
+      var newMarkup = this._generateMarkup(); //createRange->針對某部分html內容做修改
+      //createContextualFragment-->直接將html code當成input放入
+
+
+      var newDOM = document.createRange().createContextualFragment(newMarkup);
+      var newEl = Array.from(newDOM.querySelectorAll('*')); //multi element-->array(because select all)
+
+      var curEl = Array.from(this._parentEl.querySelectorAll('*')); //multi element-->array(because select all)
+
+      newEl.forEach(function (newElem, i) {
+        var _newElem$firstChild;
+
+        var currentEl = curEl[i]; //nodevalue return null if there is not text, otherwise return string
+        //Update changed TEXT
+
+        if (!newElem.isEqualNode(currentEl) && ((_newElem$firstChild = newElem.firstChild) === null || _newElem$firstChild === void 0 ? void 0 : _newElem$firstChild.nodeValue.trim()) !== '') {
+          //
+          currentEl.textContent = newElem.textContent;
+        } //update changed Attributed
+
+
+        if (!newElem.isEqualNode(currentEl)) Array.from(newElem.attributes).forEach(function (attr) {
+          currentEl.setAttribute(attr.name, attr.value);
+        });
+      });
+    }
   }]);
 
   return View;
@@ -16695,7 +16735,6 @@ var RecipeView = /*#__PURE__*/function (_View) {
   _createClass(RecipeView, [{
     key: "_generateMarkup",
     value: function _generateMarkup() {
-      console.log('gogog');
       return "\n      <figure class=\"recipe__fig\">\n        <img src=\"".concat(this._data.image, "\" alt=\"").concat(this._data.title, "\" class=\"recipe__img\" />\n        <h1 class=\"recipe__title\">\n          <span>").concat(this._data.title, "</span>\n        </h1>\n      </figure>\n\n      <div class=\"recipe__details\">\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-clock\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--minutes\">").concat(this._data.cookingTime, "</span>\n          <span class=\"recipe__info-text\">minutes</span>\n        </div>\n        <div class=\"recipe__info\">\n          <svg class=\"recipe__info-icon\">\n            <use href=\"").concat(icons, "#icon-users\"></use>\n          </svg>\n          <span class=\"recipe__info-data recipe__info-data--people\">").concat(this._data.servings, "</span>\n          <span class=\"recipe__info-text\">servings</span>\n\n          <div class=\"recipe__info-buttons\">\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings - 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-minus-circle\"></use>\n              </svg>\n            </button>\n            <button class=\"btn--tiny btn--update-servings\" data-update-to=\"").concat(this._data.servings + 1, "\">\n              <svg>\n                <use href=\"").concat(icons, "#icon-plus-circle\"></use>\n              </svg>\n            </button>\n          </div>\n        </div>\n\n        <div class=\"recipe__user-generated ").concat(this._data.key ? '' : 'hidden', "\">\n        </div>\n        <button class=\"btn--round btn--bookmark\">\n          <svg class=\"\">\n            <use href=\"").concat(icons, "#icon-bookmark").concat(this._data.bookmarked ? '-fill' : '', "\"></use>\n          </svg>\n        </button>\n      </div>\n\n      <div class=\"recipe__ingredients\">\n        <h2 class=\"heading--2\">Recipe ingredients</h2>\n        <ul class=\"recipe__ingredient-list\">\n          ").concat(this._data.ingredients.map(this._generateMarkupIngredient).join(''), "\n      </div>\n\n      <div class=\"recipe__directions\">\n        <h2 class=\"heading--2\">How to cook it</h2>\n        <p class=\"recipe__directions-text\">\n          This recipe was carefully designed and tested by\n          <span class=\"recipe__publisher\">").concat(this._data.publisher, "</span>. Please check out\n          directions at their website.\n        </p>\n        <a\n          class=\"btn--small recipe__btn\"\n          href=\"").concat(this._data.sourceUrl, "\"\n          target=\"_blank\"\n        >\n          <span>Directions</span>\n          <svg class=\"search__icon\">\n            <use href=\"").concat(icons, "#icon-arrow-right\"></use>\n          </svg>\n        </a>\n      </div>\n    ");
     }
   }, {
@@ -16709,6 +16748,17 @@ var RecipeView = /*#__PURE__*/function (_View) {
       //當window偵測到某事件發生（ex:load...)，window指的是整個介面（視窗）
       ['hashchange', 'load'].forEach(function (ev) {
         return addEventListener(ev, handler);
+      });
+    }
+  }, {
+    key: "addHandlerUpdateServings",
+    value: function addHandlerUpdateServings(inputFunction) {
+      this._parentEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn--tiny');
+        if (!btn) return;
+        var updateTo = btn.dataset.updateTo;
+        if (+updateTo <= 0) return;
+        inputFunction(+updateTo);
       });
     }
   }]);
@@ -16842,7 +16892,8 @@ var ReusltView = /*#__PURE__*/function (_View) {
   }, {
     key: "_generateMarkupPreview",
     value: function _generateMarkupPreview(result) {
-      return "<li class=\"preview\">\n        <a class=\"preview__link\" href=\"#".concat(result.id, "\">\n          <figure class=\"preview__fig\">\n            <img src=\"").concat(result.image, "\" alt=\"").concat(result.title, "\" />\n          </figure>\n          <div class=\"preview__data\">\n            <h4 class=\"preview__title\">").concat(result.title, "</h4>\n            <p class=\"preview__publisher\">").concat(result.publisher, "</p>\n    \n          </div>\n        </a>\n      </li>");
+      var id = window.location.hash.slice(1);
+      return "<li class=\"preview\">\n        <a class=\"preview__link ".concat(result.id === id ? 'preview__link--active' : '', "\" href=\"#").concat(result.id, "\">\n          <figure class=\"preview__fig\">\n            <img src=\"").concat(result.image, "\" alt=\"").concat(result.title, "\" />\n          </figure>\n          <div class=\"preview__data\">\n            <h4 class=\"preview__title\">").concat(result.title, "</h4>\n            <p class=\"preview__publisher\">").concat(result.publisher, "</p>\n    \n          </div>\n        </a>\n      </li>");
     }
   }]);
 
@@ -16850,6 +16901,116 @@ var ReusltView = /*#__PURE__*/function (_View) {
 }(_View2.default);
 
 var _default = new ReusltView();
+
+exports.default = _default;
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/view/pageinationView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _View2 = _interopRequireDefault(require("./View.js"));
+
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var icons = new URL('../img/icons.svg', import.meta.url);
+icons = icons.href.replace('/img/icons.svg', _icons.default);
+
+var PaginationView = /*#__PURE__*/function (_View) {
+  _inherits(PaginationView, _View);
+
+  var _super = _createSuper(PaginationView);
+
+  function PaginationView() {
+    var _this;
+
+    _classCallCheck(this, PaginationView);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector('.pagination'));
+
+    return _this;
+  }
+
+  _createClass(PaginationView, [{
+    key: "addHandlerClick",
+    value: function addHandlerClick(inputFunction) {
+      this._parentEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn--inline');
+        var goToPage = +btn.dataset.goto;
+        inputFunction(goToPage);
+      });
+    }
+  }, {
+    key: "_pageMove",
+    value: function _pageMove(movePage, curPage) {
+      return movePage > curPage ? "<button data-goto=\"".concat(movePage, "\" class=\"btn--inline pagination__btn--next\">\n    <span>Page ").concat(movePage, "</span>\n    <svg class=\"search__icon\">\n      <use href=\"").concat(icons, "#icon-arrow-right\"></use>\n    </svg>\n  </button>") : "<button data-goto=\"".concat(movePage, "\" class=\"btn--inline pagination__btn--prev\">\n      <svg class=\"search__icon\">\n        <use href=\"").concat(icons, "#icon-arrow-left\"></use>\n      </svg>\n      <span>Page ").concat(movePage, "</span>\n    </button>");
+    }
+  }, {
+    key: "_generateMarkup",
+    value: function _generateMarkup() {
+      var curPage = this._data.page;
+      var numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+      console.log(numPages); //inital page=1 and total page>1
+
+      if (curPage === 1 && numPages > 1) {
+        console.log("hello");
+        return this._pageMove(curPage + 1, curPage);
+      } //Page 1 without other pages
+      //Last Page
+
+
+      if (curPage === numPages && curPage > 1) {
+        return this._pageMove(curPage - 1, curPage);
+      } //Other Page
+
+
+      if (curPage < numPages && curPage > 1) {
+        return this._pageMove(curPage - 1, curPage) + this._pageMove(curPage + 1, curPage);
+      } //Page 1 with other pages
+
+
+      return '';
+    }
+  }]);
+
+  return PaginationView;
+}(_View2.default);
+
+var _default = new PaginationView();
 
 exports.default = _default;
 },{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/controller.js":[function(require,module,exports) {
@@ -16866,6 +17027,8 @@ var _recipeView = _interopRequireDefault(require("./view/recipeView.js"));
 var _searchView = _interopRequireDefault(require("./view/searchView.js"));
 
 var _resultView = _interopRequireDefault(require("./view/resultView.js"));
+
+var _pageinationView = _interopRequireDefault(require("./view/pageinationView.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16888,27 +17051,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   module.hot.accept();
 }*/
 var controlRecipe = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var id,
-        _args = arguments;
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+    var id;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            id = _args.length > 0 && _args[0] !== undefined ? _args[0] : '#5ed6604591c37cdc054bc886';
-            _context.prev = 1;
-            //get the hash value of current location
+            _context.prev = 0;
+            //get the hash value of 網址列
             id = window.location.hash.slice(1);
 
             if (id) {
-              _context.next = 5;
+              _context.next = 4;
               break;
             }
 
             return _context.abrupt("return");
 
-          case 5:
-            _recipeView.default.renderSpinner(); //1) Loading recipe
+          case 4:
+            if (e['type'] !== 'hashchange') _recipeView.default.renderSpinner(); //0) Update results view to mark selected search result
+
+            _resultView.default.update(model.getSearchResultPage()); //e['type']
+            //1) Loading recipe
 
 
             _context.next = 8;
@@ -16925,7 +17089,7 @@ var controlRecipe = /*#__PURE__*/function () {
 
           case 11:
             _context.prev = 11;
-            _context.t0 = _context["catch"](1);
+            _context.t0 = _context["catch"](0);
 
             _recipeView.default.renderError();
 
@@ -16934,10 +17098,10 @@ var controlRecipe = /*#__PURE__*/function () {
             return _context.stop();
         }
       }
-    }, _callee, null, [[1, 11]]);
+    }, _callee, null, [[0, 11]]);
   }));
 
-  return function controlRecipe() {
+  return function controlRecipe(_x) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -16950,28 +17114,32 @@ var controlSearchResults = /*#__PURE__*/function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.prev = 0;
-            //1) get search query
+
+            _resultView.default.renderSpinner(); //1) get search query
+
+
             query = _searchView.default.getQuery();
 
             _searchView.default.clearInput();
 
             if (query) {
-              _context2.next = 5;
+              _context2.next = 6;
               break;
             }
 
             return _context2.abrupt("return");
 
-          case 5:
-            _context2.next = 7;
+          case 6:
+            _context2.next = 8;
             return model.loadSearchResult(query);
 
-          case 7:
-            console.log(model.state); //3) Render result
+          case 8:
+            //3) Render result
+            _resultView.default.render(model.getSearchResultPage()); //4) Render initial pagination button
 
-            _resultView.default.render(model.getSearchResultPage(1));
 
-            console.log('s');
+            _pageinationView.default.render(model.state.search);
+
             _context2.next = 15;
             break;
 
@@ -16993,16 +17161,34 @@ var controlSearchResults = /*#__PURE__*/function () {
   };
 }();
 
-var init = function init() {
-  controlRecipe();
+var controlPagination = function controlPagination(goToPage) {
+  //1) Render NEW results
+  _resultView.default.render(model.getSearchResultPage(goToPage)); //it will update model.state.search too
+  //2)Render NEW pagination buttons
 
+
+  _pageinationView.default.render(model.state.search);
+};
+
+var controlServings = function controlServings(servings) {
+  //update the recipe servings(in state)
+  model.updateServing(servings); //update the recipe view
+
+  _recipeView.default.update(model.state.recipe);
+};
+
+var init = function init() {
   _recipeView.default.addHandleRender(controlRecipe);
 
+  _recipeView.default.addHandlerUpdateServings(controlServings);
+
   _searchView.default.addHandlerSearch(controlSearchResults);
+
+  _pageinationView.default.addHandlerClick(controlPagination);
 };
 
 init();
-},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js","./view/searchView.js":"src/js/view/searchView.js","./view/resultView.js":"src/js/view/resultView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js","./view/searchView.js":"src/js/view/searchView.js","./view/resultView.js":"src/js/view/resultView.js","./view/pageinationView.js":"src/js/view/pageinationView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -17030,7 +17216,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55296" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49163" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

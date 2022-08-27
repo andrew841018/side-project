@@ -1,5 +1,6 @@
 import View from './View.js';
 import icon from '../../img/icons.svg';
+
 let icons = new URL('../img/icons.svg', import.meta.url);
 icons = icons.href.replace('/img/icons.svg', icon);
 class ReusltView extends View {
@@ -10,8 +11,11 @@ class ReusltView extends View {
     return this._data.map(this._generateMarkupPreview).join('');
   }
   _generateMarkupPreview(result) {
+    const id = window.location.hash.slice(1);
     return `<li class="preview">
-        <a class="preview__link" href="#${result.id}">
+        <a class="preview__link ${
+          result.id === id ? 'preview__link--active' : ''
+        }" href="#${result.id}">
           <figure class="preview__fig">
             <img src="${result.image}" alt="${result.title}" />
           </figure>

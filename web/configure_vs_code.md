@@ -11,3 +11,4 @@
 9. npm init
 10. npm i parcel@2
 11. npm i core-js regenerator-runtime
+12. parcel index.html

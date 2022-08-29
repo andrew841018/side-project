@@ -6,10 +6,17 @@ const timeout = function (s) {
     }, s * 1000);
   });
 };
-export const getJSON = async function (url) {
+export const AJAX = async function (url, uploadData = undefined) {
   try {
-    //(1)loading recipe
-    const fetchUrl = fetch(url);
+    const fetchUrl = uploadData
+      ? fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(uploadData),
+        })
+      : fetch(url);
     const res = await Promise.race([fetchUrl, timeout(TIMEOUT_SEC)]);
     const data = res.json();
     if (!res.ok) {

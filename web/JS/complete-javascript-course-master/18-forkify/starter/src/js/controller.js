@@ -5,6 +5,7 @@ import recipeView from './view/recipeView.js';
 import searchView from './view/searchView.js';
 import resultView from './view/resultView.js';
 import pageinationView from './view/pageinationView.js';
+import bookmarksView from './view/bookmarkView.js';
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
@@ -19,6 +20,8 @@ const controlRecipe = async function (e) {
     if (e['type'] !== 'hashchange') recipeView.renderSpinner();
     //0) Update results view to mark selected search result
     resultView.update(model.getSearchResultPage());
+    //Update bookmark view
+    bookmarksView.update(model.state.bookmarks);
     //e['type']
     //1) Loading recipe
     await model.loadRecipe(id);
@@ -28,6 +31,7 @@ const controlRecipe = async function (e) {
     recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
+    console.log(err);
   }
 };
 const controlSearchResults = async function () {
@@ -59,10 +63,29 @@ const controlServings = function (servings) {
   //update the recipe view
   recipeView.update(model.state.recipe);
 };
+const controlAddBookmark = function () {
+  //1) Add/remove bookmark
+  console.log(model.state.recipe.bookmarked);
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.deleteBookmark(model.state.recipe.id);
+  //2) Update recipe view
+  recipeView.update(model.state.recipe);
+  //3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
+};
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks);
+};
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandleRender(controlRecipe);
   recipeView.addHandlerUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
   pageinationView.addHandlerClick(controlPagination);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
 };
 init();
+//cancel all bookmarks...not using yet
+const clearBookmark = function () {
+  localStorage.clear('bookmarks');
+};

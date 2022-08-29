@@ -15969,9 +15969,7 @@ exports.getJSON = getJSON;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateServing = exports.state = exports.loadSearchResult = exports.loadRecipe = exports.getSearchResultPage = void 0;
-
-var _regeneratorRuntime2 = require("regenerator-runtime");
+exports.updateServing = exports.state = exports.loadSearchResult = exports.loadRecipe = exports.getSearchResultPage = exports.deleteBookmark = exports.addBookmark = void 0;
 
 var _config = require("./config.js");
 
@@ -15992,7 +15990,8 @@ var state = {
     results: [],
     page: 1,
     resultsPerPage: _config.RES_PER_PAGE
-  }
+  },
+  bookmarks: []
 };
 exports.state = state;
 
@@ -16021,22 +16020,26 @@ var loadRecipe = /*#__PURE__*/function () {
               servings: recipe.servings,
               cookingTime: recipe.cooking_time,
               ingredients: recipe.ingredients
-            };
-            _context.next = 12;
+            }; //when load the recipe, we load bookmark info too.
+
+            if (state.bookmarks.some(function (bookmark) {
+              return bookmark.id === id;
+            })) state.recipe.bookmarked = true;else state.recipe.bookmarked = false;
+            _context.next = 13;
             break;
 
-          case 8:
-            _context.prev = 8;
+          case 9:
+            _context.prev = 9;
             _context.t0 = _context["catch"](0);
             console.log("(model.js)".concat(_context.t0));
             throw _context.t0;
 
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee, null, [[0, 9]]);
   }));
 
   return function loadRecipe(_x) {
@@ -16067,21 +16070,22 @@ var loadSearchResult = /*#__PURE__*/function () {
                 image: rec.image_url
               };
             });
-            _context2.next = 11;
+            state.search.page = 1;
+            _context2.next = 12;
             break;
 
-          case 7:
-            _context2.prev = 7;
+          case 8:
+            _context2.prev = 8;
             _context2.t0 = _context2["catch"](0);
             console.log("(model.js)".concat(_context2.t0));
             throw _context2.t0;
 
-          case 11:
+          case 12:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 7]]);
+    }, _callee2, null, [[0, 8]]);
   }));
 
   return function loadSearchResult(_x2) {
@@ -16109,7 +16113,42 @@ var updateServing = function updateServing(newServing) {
 };
 
 exports.updateServing = updateServing;
-},{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helper.js":"src/js/helper.js"}],"src/img/icons.svg":[function(require,module,exports) {
+
+var addBookmark = function addBookmark(recipe) {
+  state.bookmarks.push(recipe);
+  if (recipe.id === state.recipe.id) state.recipe.bookmarked = true; //why did that?
+
+  persistBookmarks();
+};
+
+exports.addBookmark = addBookmark;
+
+var deleteBookmark = function deleteBookmark(id) {
+  //Delete bookmark
+  var index = state.bookmarks.findIndex(function (el) {
+    return el.id === id;
+  });
+  state.bookmarks.splice(index, 1); //get element from array
+  //Mark current recipe as NOT bookmarked
+
+  if (id === state.recipe.id) state.recipe.bookmarked = false;
+  persistBookmarks();
+};
+
+exports.deleteBookmark = deleteBookmark;
+
+var persistBookmarks = function persistBookmarks() {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+
+var init = function init() {
+  var storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage); //modify JSON to object
+};
+
+init();
+console.log(state.bookmarks);
+},{"./config.js":"src/js/config.js","./helper.js":"src/js/helper.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"node_modules/fractional/index.js":[function(require,module,exports) {
 'use strict';
@@ -16591,15 +16630,20 @@ var View = /*#__PURE__*/function () {
   _createClass(View, [{
     key: "render",
     value: function render(data) {
+      var _render = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
       if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
       this._data = data;
 
       var markup = this._generateMarkup();
 
+      if (!_render) return markup; //markup is an html code-->String
+
       this._clear();
 
       this._parentEl.insertAdjacentHTML('afterbegin', markup);
     } //public because controller will need it.
+    //flickering...
 
   }, {
     key: "renderSpinner",
@@ -16761,6 +16805,15 @@ var RecipeView = /*#__PURE__*/function (_View) {
         inputFunction(+updateTo);
       });
     }
+  }, {
+    key: "addHandlerAddBookmark",
+    value: function addHandlerAddBookmark(handler) {
+      this._parentEl.addEventListener('click', function (e) {
+        var btn = e.target.closest('.btn--bookmark');
+        if (!btn) return;
+        handler();
+      });
+    }
   }]);
 
   return RecipeView;
@@ -16818,7 +16871,7 @@ var SearchView = /*#__PURE__*/function () {
 var _default = new SearchView();
 
 exports.default = _default;
-},{}],"src/js/view/resultView.js":[function(require,module,exports) {
+},{}],"src/js/view/previewView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16829,6 +16882,84 @@ exports.default = void 0;
 var _View2 = _interopRequireDefault(require("./View.js"));
 
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var icons = new URL('../img/icons.svg', import.meta.url);
+icons = icons.href.replace('/img/icons.svg', _icons.default);
+
+var PreviewView = /*#__PURE__*/function (_View) {
+  _inherits(PreviewView, _View);
+
+  var _super = _createSuper(PreviewView);
+
+  function PreviewView() {
+    var _this;
+
+    _classCallCheck(this, PreviewView);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "_parentEl", '');
+
+    return _this;
+  }
+
+  _createClass(PreviewView, [{
+    key: "_generateMarkup",
+    value: function _generateMarkup() {
+      var id = window.location.hash.slice(1);
+      return "<li class=\"preview\">\n        <a class=\"preview__link ".concat(this._data.id === id ? 'preview__link--active' : '', "\" href=\"#").concat(this._data.id, "\">\n          <figure class=\"preview__fig\">\n            <img src=\"").concat(this._data.image, "\" alt=\"").concat(this._data.title, "\" />\n          </figure>\n          <div class=\"preview__data\">\n            <h4 class=\"preview__title\">").concat(this._data.title, "</h4>\n            <p class=\"preview__publisher\">").concat(this._data.publisher, "</p>\n    \n          </div>\n        </a>\n      </li>");
+    }
+  }]);
+
+  return PreviewView;
+}(_View2.default);
+
+var _default = new PreviewView();
+
+exports.default = _default;
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/view/resultView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _View2 = _interopRequireDefault(require("./View.js"));
+
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+var _previewView = _interopRequireDefault(require("./previewView.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16887,13 +17018,9 @@ var ReusltView = /*#__PURE__*/function (_View) {
   _createClass(ReusltView, [{
     key: "_generateMarkup",
     value: function _generateMarkup() {
-      return this._data.map(this._generateMarkupPreview).join('');
-    }
-  }, {
-    key: "_generateMarkupPreview",
-    value: function _generateMarkupPreview(result) {
-      var id = window.location.hash.slice(1);
-      return "<li class=\"preview\">\n        <a class=\"preview__link ".concat(result.id === id ? 'preview__link--active' : '', "\" href=\"#").concat(result.id, "\">\n          <figure class=\"preview__fig\">\n            <img src=\"").concat(result.image, "\" alt=\"").concat(result.title, "\" />\n          </figure>\n          <div class=\"preview__data\">\n            <h4 class=\"preview__title\">").concat(result.title, "</h4>\n            <p class=\"preview__publisher\">").concat(result.publisher, "</p>\n    \n          </div>\n        </a>\n      </li>");
+      return this._data.map(function (result) {
+        return _previewView.default.render(result, false);
+      }).join('');
     }
   }]);
 
@@ -16903,7 +17030,7 @@ var ReusltView = /*#__PURE__*/function (_View) {
 var _default = new ReusltView();
 
 exports.default = _default;
-},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/view/pageinationView.js":[function(require,module,exports) {
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg","./previewView.js":"src/js/view/previewView.js"}],"src/js/view/pageinationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17013,7 +17140,95 @@ var PaginationView = /*#__PURE__*/function (_View) {
 var _default = new PaginationView();
 
 exports.default = _default;
-},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/controller.js":[function(require,module,exports) {
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/view/bookmarkView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _View2 = _interopRequireDefault(require("./View.js"));
+
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+
+var _previewView = _interopRequireDefault(require("./previewView.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var icons = new URL('../img/icons.svg', import.meta.url);
+icons = icons.href.replace('/img/icons.svg', _icons.default);
+
+var BookmarksView = /*#__PURE__*/function (_View) {
+  _inherits(BookmarksView, _View);
+
+  var _super = _createSuper(BookmarksView);
+
+  function BookmarksView() {
+    var _this;
+
+    _classCallCheck(this, BookmarksView);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+
+    _defineProperty(_assertThisInitialized(_this), "_parentEl", document.querySelector('.bookmarks__list'));
+
+    _defineProperty(_assertThisInitialized(_this), "_errorMessage", 'No bookmark yet. Find a nice recipe and bookmark it 😏');
+
+    _defineProperty(_assertThisInitialized(_this), "_message", '');
+
+    return _this;
+  }
+
+  _createClass(BookmarksView, [{
+    key: "addHandlerRender",
+    value: function addHandlerRender(handler) {
+      window.addEventListener('load', handler);
+    }
+  }, {
+    key: "_generateMarkup",
+    value: function _generateMarkup() {
+      return this._data.map(function (bookmark) {
+        return _previewView.default.render(bookmark, false);
+      }).join('');
+    }
+  }]);
+
+  return BookmarksView;
+}(_View2.default);
+
+var _default = new BookmarksView();
+
+exports.default = _default;
+},{"./View.js":"src/js/view/View.js","../../img/icons.svg":"src/img/icons.svg","./previewView.js":"src/js/view/previewView.js"}],"src/js/controller.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/stable");
@@ -17029,6 +17244,8 @@ var _searchView = _interopRequireDefault(require("./view/searchView.js"));
 var _resultView = _interopRequireDefault(require("./view/resultView.js"));
 
 var _pageinationView = _interopRequireDefault(require("./view/pageinationView.js"));
+
+var _bookmarkView = _interopRequireDefault(require("./view/bookmarkView.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17071,34 +17288,39 @@ var controlRecipe = /*#__PURE__*/function () {
           case 4:
             if (e['type'] !== 'hashchange') _recipeView.default.renderSpinner(); //0) Update results view to mark selected search result
 
-            _resultView.default.update(model.getSearchResultPage()); //e['type']
+            _resultView.default.update(model.getSearchResultPage()); //Update bookmark view
+
+
+            _bookmarkView.default.update(model.state.bookmarks); //e['type']
             //1) Loading recipe
 
 
-            _context.next = 8;
+            _context.next = 9;
             return model.loadRecipe(id);
 
-          case 8:
+          case 9:
             //2) Rendering recipe
             //put object to render function
             //因為繼承的關係，我們能夠直接在這裡使用render
             _recipeView.default.render(model.state.recipe);
 
-            _context.next = 14;
+            _context.next = 16;
             break;
 
-          case 11:
-            _context.prev = 11;
+          case 12:
+            _context.prev = 12;
             _context.t0 = _context["catch"](0);
 
             _recipeView.default.renderError();
 
-          case 14:
+            console.log(_context.t0);
+
+          case 16:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 11]]);
+    }, _callee, null, [[0, 12]]);
   }));
 
   return function controlRecipe(_x) {
@@ -17177,7 +17399,24 @@ var controlServings = function controlServings(servings) {
   _recipeView.default.update(model.state.recipe);
 };
 
+var controlAddBookmark = function controlAddBookmark() {
+  //1) Add/remove bookmark
+  console.log(model.state.recipe.bookmarked);
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);else model.deleteBookmark(model.state.recipe.id); //2) Update recipe view
+
+  _recipeView.default.update(model.state.recipe); //3) Render bookmarks
+
+
+  _bookmarkView.default.render(model.state.bookmarks);
+};
+
+var controlBookmarks = function controlBookmarks() {
+  _bookmarkView.default.render(model.state.bookmarks);
+};
+
 var init = function init() {
+  _bookmarkView.default.addHandlerRender(controlBookmarks);
+
   _recipeView.default.addHandleRender(controlRecipe);
 
   _recipeView.default.addHandlerUpdateServings(controlServings);
@@ -17185,10 +17424,16 @@ var init = function init() {
   _searchView.default.addHandlerSearch(controlSearchResults);
 
   _pageinationView.default.addHandlerClick(controlPagination);
+
+  _recipeView.default.addHandlerAddBookmark(controlAddBookmark);
 };
 
-init();
-},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js","./view/searchView.js":"src/js/view/searchView.js","./view/resultView.js":"src/js/view/resultView.js","./view/pageinationView.js":"src/js/view/pageinationView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+init(); //cancel all bookmarks...not using yet
+
+var clearBookmark = function clearBookmark() {
+  localStorage.clear('bookmarks');
+};
+},{"core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","./model.js":"src/js/model.js","./view/recipeView.js":"src/js/view/recipeView.js","./view/searchView.js":"src/js/view/searchView.js","./view/resultView.js":"src/js/view/resultView.js","./view/pageinationView.js":"src/js/view/pageinationView.js","./view/bookmarkView.js":"src/js/view/bookmarkView.js"}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

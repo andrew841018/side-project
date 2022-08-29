@@ -6,15 +6,17 @@ export default class View {
   _message = ''; //success message-->for future used.
   _errorMessage = "we couldn't find recipe, please try another one";
   _parentEl = document.querySelector('.recipe');
-  render(data) {
+  render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
     this._data = data;
     const markup = this._generateMarkup();
+    if (!render) return markup; //markup is an html code-->String
     this._clear();
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
   }
   //public because controller will need it.
+  //flickering...
   renderSpinner() {
     const markup = `
     <div class="spinner">

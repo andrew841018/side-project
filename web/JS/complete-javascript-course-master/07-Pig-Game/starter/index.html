@@ -11,14 +11,26 @@
     <container class="container">
       <div class="player">
         <div class="player_1">
-          <header>PLAYER 1</header>
+          <div class="header">PLAYER 1</div>
           <p id="score-1">0</p>
-          <div class="current_score">CURRENT SCORE</div>
+          <div class="current_score">
+            <div>CURRENT</div>
+            <div id="save-score1">0</div>
+          </div>
         </div>
         <div class="player_2">
-          <header>PLAYER 2</header>
+          <div class="header">PLAYER 2</div>
           <p id="score-2">0</p>
-          <div class="current_score">CURRENT SCORE</div>
+          <div class="current_score">
+            <div>CURRENT</div>
+            <div id="save-score2">0</div>
+          </div>
+        </div>
+        <div class="btn">
+          <button class="btn-reset">NEW GAME</button>
+          <button class="btn-dice">ROLL DICE</button>
+          <button class="btn-hold">HOLD</button>
+          <img class="dice" src="dice-6.png" alt="dice-1" />
         </div>
       </div>
     </container>

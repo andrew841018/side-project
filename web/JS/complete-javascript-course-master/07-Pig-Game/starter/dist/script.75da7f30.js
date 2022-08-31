@@ -122,13 +122,125 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
 var player1 = document.querySelector('.player_1');
 var player2 = document.querySelector('.player_2');
+var dice = document.querySelector('.dice');
+var roll = document.querySelector('.btn-dice');
+var hold = document.querySelector('.btn-hold');
+var reset = document.querySelector('.btn-reset');
+var current_score = document.getElementById('save-score1');
+var sum = 0,
+    active_player = 1;
+var score = document.getElementById('score-1');
+var curr_sum = 0;
+var dice_path = ['dice-1.d626e253', 'dice-2.9c2270f8', 'dice-3.40550703', 'dice-4.3fea6ae2', 'dice-5.8aa9684a', 'dice-6.e7359e68'];
+var THRESHOLD = 20;
 
 var init = function init() {
   player1.classList.add('sleep');
   player2.classList.add('active');
+  roll.disabled = false;
+  hold.disabled = false;
+  score = document.getElementById("score-".concat(active_player));
+  current_score = document.getElementById("save-score".concat(active_player));
+  sum = 0;
+  curr_sum = 0;
+  score.textContent = '0';
+  current_score.textContent = '0';
+  dice.src = "".concat(dice_path[5], ".png");
 };
 
 init();
+
+var choose_winner = function choose_winner() {
+  player1.classList.add('winner');
+  player1.classList.toggle('active');
+  player2.classList.add('winner');
+  player2.classList.toggle('active');
+};
+
+var check = function check() {
+  if (sum >= THRESHOLD) {
+    switch (active_player) {
+      case 1:
+        player1.classList.remove('active');
+        player1.classList.add('winner');
+        break;
+
+      case 2:
+        player2.classList.remove('active');
+        player2.classList.add('winner');
+        break;
+    }
+
+    roll.disabled = true;
+    hold.disabled = true;
+  }
+};
+
+var switch_player = function switch_player() {
+  player1.classList.toggle('sleep');
+  player1.classList.toggle('active');
+  player2.classList.toggle('sleep');
+  player2.classList.toggle('active');
+  curr_sum = 0;
+  current_score.textContent = String(curr_sum);
+};
+
+var switch_or_not = function switch_or_not(dice_num) {
+  if (dice_num === 1) {
+    switch_player();
+  }
+};
+
+roll.addEventListener('click', function () {
+  var random = Math.floor(Math.random() * 6);
+  dice.src = "".concat(dice_path[random], ".png");
+  switch_or_not(random + 1);
+
+  if (player1.classList.contains('active')) {
+    active_player = 1;
+  } else {
+    active_player = 2;
+  }
+
+  if (random + 1 === 1) return;
+  current_score = document.getElementById("save-score".concat(active_player));
+  curr_sum += random + 1;
+  current_score.textContent = String(curr_sum);
+});
+hold.addEventListener('click', function () {
+  score = document.getElementById("score-".concat(active_player));
+  current_score = document.getElementById("save-score".concat(active_player));
+  sum = +score.textContent;
+
+  if (sum < THRESHOLD) {
+    sum += +current_score.textContent;
+    score.textContent = sum;
+  }
+
+  curr_sum = 0;
+  current_score.textContent = '0';
+  check();
+});
+
+var new_game = function new_game() {
+  switch (active_player) {
+    case 1:
+      player1.classList.remove('winner');
+      player1.classList.toggle('active');
+      break;
+
+    case 2:
+      player2.classList.remove('winner');
+      player2.classList.toggle('active');
+      break;
+  }
+
+  player1.classList.remove('sleep');
+  player1.classList.remove('active');
+  init();
+};
+
+reset.addEventListener('click', new_game);
 },{}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -157,7 +269,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57016" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56068" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

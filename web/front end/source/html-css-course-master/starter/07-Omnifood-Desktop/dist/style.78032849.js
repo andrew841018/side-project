@@ -117,131 +117,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"script.js":[function(require,module,exports) {
-'use strict';
+})({"../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-var player1 = document.querySelector('.player_1');
-var player2 = document.querySelector('.player_2');
-var dice = document.querySelector('.dice');
-var roll = document.querySelector('.btn-dice');
-var hold = document.querySelector('.btn-hold');
-var reset = document.querySelector('.btn-reset');
-var current_score = document.getElementById('save-score1');
-var sum = 0,
-    active_player = 1;
-var score = document.getElementById('score-1');
-var curr_sum = 0;
-var dice_path = ['dice-1.d626e253', 'dice-2.9c2270f8', 'dice-3.40550703', 'dice-4.3fea6ae2', 'dice-5.8aa9684a', 'dice-6.e7359e68'];
-var THRESHOLD = 20;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
 
-var init = function init() {
-  player1.classList.add('sleep');
-  player2.classList.add('active');
-  roll.disabled = false;
-  hold.disabled = false;
-  score = document.getElementById("score-".concat(active_player));
-  current_score = document.getElementById("save-score".concat(active_player));
-  sum = 0;
-  curr_sum = 0;
-  score.textContent = '0';
-  current_score.textContent = '0';
-  dice.src = "".concat(dice_path[5], ".png");
-};
+  return bundleURL;
+}
 
-init();
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
-var choose_winner = function choose_winner() {
-  player1.classList.add('winner');
-  player1.classList.toggle('active');
-  player2.classList.add('winner');
-  player2.classList.toggle('active');
-};
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
 
-var check = function check() {
-  if (sum >= THRESHOLD) {
-    switch (active_player) {
-      case 1:
-        player1.classList.remove('active');
-        player1.classList.add('winner');
-        break;
+  return '/';
+}
 
-      case 2:
-        player2.classList.remove('active');
-        player2.classList.add('winner');
-        break;
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
     }
 
-    roll.disabled = true;
-    hold.disabled = true;
-  }
-};
+    cssTimeout = null;
+  }, 50);
+}
 
-var switch_player = function switch_player() {
-  player1.classList.toggle('sleep');
-  player1.classList.toggle('active');
-  player2.classList.toggle('sleep');
-  player2.classList.toggle('active');
-  curr_sum = 0;
-  current_score.textContent = String(curr_sum);
-};
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"css/style.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
 
-var switch_or_not = function switch_or_not(dice_num) {
-  if (dice_num === 1) {
-    switch_player();
-  }
-};
-
-roll.addEventListener('click', function () {
-  var random = Math.floor(Math.random() * 6);
-  dice.src = "".concat(dice_path[random], ".png");
-  switch_or_not(random + 1);
-
-  if (player1.classList.contains('active')) {
-    active_player = 1;
-  } else {
-    active_player = 2;
-  }
-
-  if (random + 1 === 1) return;
-  current_score = document.getElementById("save-score".concat(active_player));
-  curr_sum += random + 1;
-  current_score.textContent = String(curr_sum);
-});
-hold.addEventListener('click', function () {
-  score = document.getElementById("score-".concat(active_player));
-  current_score = document.getElementById("save-score".concat(active_player));
-  sum = +score.textContent;
-
-  if (sum < THRESHOLD) {
-    sum += +current_score.textContent;
-    score.textContent = sum;
-  }
-
-  curr_sum = 0;
-  current_score.textContent = '0';
-  check();
-});
-
-var new_game = function new_game() {
-  switch (active_player) {
-    case 1:
-      player1.classList.remove('winner');
-      player1.classList.toggle('active');
-      break;
-
-    case 2:
-      player2.classList.remove('winner');
-      player2.classList.toggle('active');
-      break;
-  }
-
-  player1.classList.remove('sleep');
-  player1.classList.remove('active');
-  init();
-};
-
-reset.addEventListener('click', new_game);
-},{}],"../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -269,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56892" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62741" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -445,5 +393,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","script.js"], null)
-//# sourceMappingURL=/script.75da7f30.js.map
+},{}]},{},["../../../../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/style.78032849.js.map

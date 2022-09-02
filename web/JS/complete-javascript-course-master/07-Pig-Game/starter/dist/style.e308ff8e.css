@@ -49,33 +49,24 @@ body {
   position: relative;
 }
 .btn {
-  text-align: center;
-  justify-content: center;
+  position: absolute;
+  height: 100%;
+  display: grid;
+  left: 50%;
+  transform: translate(-50%, 0);
+  grid-template-rows: auto auto auto auto;
 }
 button {
   font-size: 26px;
   background-color: rgba(240, 248, 255, 0.817);
-  padding: 0.3rem;
   border-radius: 10%;
 }
 .btn-reset {
-  position: absolute;
-  top: 5%;
-  left: 45%;
+  margin: 30px;
 }
 .btn-hold {
-  position: absolute;
-  height: auto;
-  width: auto;
-  bottom: 20%;
-  left: 47%;
 }
 .btn-dice {
-  position: absolute;
-  height: auto;
-  width: auto;
-  bottom: 30%;
-  left: 45%;
 }
 .current_score {
   font-size: 36px;

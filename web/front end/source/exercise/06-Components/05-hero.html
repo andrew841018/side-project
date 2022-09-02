@@ -22,11 +22,12 @@
         color: #444;
       }
       nav {
+        padding: 30px;
         font-size: 20px;
         font-weight: 700;
         display: flex;
+        color: #fff;
         justify-content: space-between;
-        background-color: green;
       }
       h1 {
         font-size: 52px;
@@ -52,17 +53,32 @@
         font-size: 44px;
         margin-bottom: 48px;
       }
-      .container {
-        margin: 0 auto;
-        width: 1200px;
-      }
       .section {
         padding: 96px 0;
         background-color: #f7f7f7;
       }
       header {
-        background-color: orange;
         height: 100vh;
+        position: relative;
+        background-image: linear-gradient(
+            rgba(34, 34, 34, 0.6),
+            rgba(34, 34, 34, 0.6)
+          ),
+          url(hero.jpg);
+        background-size: cover;
+      }
+      .header-container-inner {
+        width: 50%;
+        color: white;
+      }
+      .header-container {
+        position: absolute;
+        width: 1200px;
+        left: 50%;
+        right: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
       }
     </style>
   </head>
@@ -73,25 +89,17 @@
         <div>NAVIGATION</div>
       </nav>
 
-      <div class="container">
-        <h1>A health meal delivered to your door,every single day</h1>
-        <p>
-          The smart 365-days-per-yerar food subscription that will make you eat
-          health again.Tailored to your personal tastes and nutritional needs
-        </p>
-        <a href="#" class="btn">Start eating well</a>
+      <div class="header-container">
+        <div class="header-container-inner">
+          <h1>A health meal delivered to your door,every single day</h1>
+          <p>
+            The smart 365-days-per-yerar food subscription that will make you
+            eat health again.Tailored to your personal tastes and nutritional
+            needs
+          </p>
+          <a href="#" class="btn">Start eating well</a>
+        </div>
       </div>
     </header>
-    <section class="container">
-      <div>
-        <h2>some random heading</h2>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo quia
-          repellat nam molestiae assumenda accusantium animi neque sed
-          repudiandae facere officia magni cupiditate inventore, dolores veniam
-          quisquam ipsum soluta praesentium?
-        </p>
-      </div>
-    </section>
   </body>
 </html>

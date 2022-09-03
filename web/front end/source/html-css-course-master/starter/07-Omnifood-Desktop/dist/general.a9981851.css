@@ -44,7 +44,8 @@
 }
 .grid {
   display: grid;
-  gap: 9.6rem;
+  row-gap: 9.6rem;
+  column-gap: 6.4rem;
 }
 .grid--2-cols {
   grid-template-columns: repeat(2, 1fr);
@@ -58,6 +59,14 @@
 .step-description {
   font-size: 2rem;
   line-height: 1.8;
+}
+.step-img-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-img {
+  width: 35%;
 }
 
 

@@ -3,8 +3,8 @@ const app = express();
 app.get('/', (req, res) => {
   res.status(200).send('Hello');
 });
-app.post('/', (req, res) => {
-  res.send('You can Post...');
+app.post('/api/v1/tours/:id/:x/:y', (req, res) => {
+  console.log(req.params);
 });
 const port = 3000;
 app.listen(port, () => {

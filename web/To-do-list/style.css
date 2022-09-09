@@ -1,0 +1,121 @@
+@media (max-width: 400px) {
+  html {
+    font-size: 75%;
+    position: absolute;
+    left: 5%;
+  }
+}
+@media (max-width: 420px && min-width:401px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 830px && min-width:421px) {
+  html {
+    font-size: 180%;
+    position: absolute;
+    left: 5%;
+  }
+}
+@media screen {
+  html {
+    font-size: 80%;
+    position: absolute;
+    left: 10%;
+  }
+}
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 2rem;
+  box-sizing: border-box;
+}
+form {
+  font-family: sans-serif;
+  padding: 0.625rem;
+  font-size: 36px;
+}
+label {
+  display: inline-block;
+  width: 36px;
+  text-align: right;
+}
+#user-account,
+#password {
+  margin-left: 210px;
+}
+button {
+  position: absolute;
+  top: 15%;
+  left: 90%;
+  /*background-color: #ffe3e3;*/
+}
+.show_login {
+  margin-top: 10%;
+  text-align: center;
+}
+.disappear {
+  opacity: 0%;
+}
+.to-do-list {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+.to-do-list input {
+  display: block;
+}
+.add {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  opacity: 100;
+  display: inline-block;
+  width: 22rem;
+  height: 3rem;
+}
+ul li {
+  position: absolute;
+  line-height: 2.4rem;
+  height: auto;
+  top: -1rem;
+  list-style: none;
+  /*border: 5px solid oldlace;*/
+  padding: 1.25rem 0.625rem;
+}
+
+.input_content {
+  text-align: center;
+  margin-left: 2.8125rem;
+  margin-top: 0.625rem;
+  margin-bottom: 0.625rem;
+  width: 75%;
+}
+.input_class {
+  background-color: #e5dbff;
+}
+h1 {
+  padding-top: 0.625rem;
+  text-align: center;
+}
+.remove {
+  margin-left: auto;
+}
+.color {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ffe3e3;
+  height: 3.5rem;
+}
+body {
+  position: relative;
+}
+.clear_all {
+  position: absolute;
+  top: -2%;
+  left: -12%;
+  font-size: 1.1rem;
+}

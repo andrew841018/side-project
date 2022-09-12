@@ -30,9 +30,9 @@
   margin: 0;
   font-size: 2rem;
   box-sizing: border-box;
+  font-family: Arial;
 }
 form {
-  font-family: sans-serif;
   padding: 0.625rem;
   font-size: 36px;
 }
@@ -48,7 +48,7 @@ label {
 button {
   position: absolute;
   top: 15%;
-  left: 90%;
+  left: 92%;
   /*background-color: #ffe3e3;*/
 }
 .show_login {
@@ -76,16 +76,26 @@ button {
   width: 22rem;
   height: 3rem;
 }
-ul li {
+.color li {
+  /* 18 word/line */
   position: absolute;
-  line-height: 2.4rem;
-  height: auto;
-  top: -1rem;
+  top: 0rem;
   list-style: none;
+  border: 0.05rem solid #f06595;
+  border-color: #f06595 #ffe3e3;
+  width: 100%;
+  background-color: #ffe3e3;
+  padding-left: 0.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   /*border: 5px solid oldlace;*/
-  padding: 1.25rem 0.625rem;
 }
-
+.new_list {
+  /* border-bottom-color: #f06595;
+  border-bottom-width: 0.05rem;
+  border-bottom-style: solid;*/
+}
 .input_content {
   text-align: center;
   margin-left: 2.8125rem;
@@ -101,14 +111,22 @@ h1 {
   text-align: center;
 }
 .remove {
+  margin-top: 0.5rem;
   margin-left: auto;
+  border: none;
+  background-color: #ffe3e3;
+  color: gray;
 }
 .color {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  background-color: #ffe3e3;
-  height: 3.5rem;
+
+  /* 
+  7.7rem for 3 line...and so on
+  5.5rem for 2 line
+  3.3rem for 1 line
+  */
+  margin-bottom: 3.3rem;
 }
 body {
   position: relative;

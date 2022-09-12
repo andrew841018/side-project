@@ -141,6 +141,7 @@ var list = document.getElementById("to-do-list");
 var remove_btn = document.querySelector(".remove");
 var curr_list = document.querySelector(".color");
 var clear_all = document.querySelector(".clear_all");
+var add_list = document.querySelector(".new_list");
 login_page.classList.toggle("show_login");
 /*
 login.addEventListener("click", () => {
@@ -149,18 +150,36 @@ login.addEventListener("click", () => {
 
 */
 
-var count = 0;
-document.addEventListener("keydown", function (e) {
-  var input = toBuyList.value;
+var margin_size = function margin_size(input_length) {
+  var line = Math.floor(input_length / 18) + 1;
+  var margin_bottom = 3.3 + 2.2 * (line - 1);
+  return String(margin_bottom) + "rem";
+};
 
-  if (e.key === "Enter" && !input.startsWith(" ") && input) {
-    var html = "\n    <div class=\"color\">\n      <li>".concat(input, "</li>\n      <button class=\"remove item-").concat(count, "\">remove</button>\n      </div>\n      ");
+var count = 0;
+var chinese_count = 0;
+
+var insert_list = function insert_list(e) {
+  var input = toBuyList.value;
+  var pattern = new RegExp("[\u4E00-\u9FA5]+"); //is chinese?
+
+  if (pattern.test(input) && e.key === "Enter") {
+    chinese_count++;
+  }
+
+  if (chinese_count == 2 || !pattern.test(input) && e.key === "Enter" && !input.startsWith(" ") && input) {
+    chinese_count = 0;
+    var html = "\n    <div class=\"color color-".concat(count, "\">\n    <li class=\"new_list\" style=\"word-break:keep-all\">").concat(input, "</li>\n    <button class=\"remove item-").concat(count, "\">X</button>\n    </div>\n    ");
     count++;
     list.insertAdjacentHTML("afterbegin", html);
+    var curr = document.querySelector(".color-".concat(count - 1));
+    curr.classList.add("new_list");
+    curr.style.marginBottom = margin_size(input.length);
     toBuyList.value = "";
   }
-});
-document.addEventListener("click", function (e) {
+};
+
+var check_list = function check_list(e) {
   this.elem = e.target.closest("ul");
   var second_class = e.target.className.split(" ")[1];
 
@@ -168,16 +187,23 @@ document.addEventListener("click", function (e) {
     var li = e.target.closest(".color").children[0];
     var btn = e.target.closest(".color").children[1];
     var val = "<s>" + li.textContent + "</s>";
-    e.target.closest(".color").innerHTML = "<li style=\"word-break:break-all\">".concat(val, "</li>\n    <button class=\"remove item-").concat(second_class, "\">X</button>"); // e.target.closest(".color").style.display = "none";
+    e.target.closest(".color").innerHTML = "<li class=\"new_list\" style=\"word-break:keep-all\">".concat(val, "</li>\n    <button class=\"remove item-").concat(second_class, "\">X</button>"); // e.target.closest(".color").style.display = "none";
   }
-});
-clear_all.addEventListener("click", function (e) {
+};
+
+var remove_all = function remove_all(e) {
   //e.target.parentElement.children[2].children.remove();
   _toConsumableArray(e.target.parentElement.children[2].children).forEach(function (elem) {
     elem.remove();
   }); //e.target.closest(".add").children[2].style.display = "none";
 
-});
+};
+
+document.addEventListener("keydown", insert_list); //input new data
+
+document.addEventListener("click", check_list); //X button
+
+clear_all.addEventListener("click", remove_all); //clear all button
 },{}],"../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -206,7 +232,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49925" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53154" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

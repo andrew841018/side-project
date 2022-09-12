@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const validator = require('validator');
 const { query, query } = require('express');
 
 dotenv.config({ path: './config.env' });
@@ -47,18 +48,47 @@ app.listen(port, () => {
   console.log(`App running on port:${port}`);
 });
 
-const slugify=require('slugifiy');
+////
+const slugify = require('slugifiy');
 const schema = new mongoose.Schema({
-  duration: {
+  price: {
     type: Number,
+    required: [true, 'error price'],
   },
-  {
-    toJSON:{virtuals:true},
-    toObject:{virtuals:true}
-  }
+  priceDiscount: {
+    type: Number,
+    validator: function (val) {
+      return val < this.price;
+    },
+  },
+  priceDiscount2: {
+    type: Number,
+    validator: function (val) {
+      //this only point to current doc on NEW document creation
+      return val < this.price;
+    },
+    message: 'Discount price ({VALUE}) should below regular price', //VALUE=val
+  },
+  name: {
+    type: String,
+    validator: [validator.isAlpha, 'not a name'],
+  },
 });
-schema.pre('save',function(next){
-    this.slug=slugify(this.name,{lower:true});
-    next();
+schema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { tour: { $ne: true } } });
 });
 
+const catchAsync = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
+};
+createTour = catchAsync(async (req, res, next) => {
+  const newTour = await Tour.create(req.body);
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tour: newTour,
+    },
+  });
+});

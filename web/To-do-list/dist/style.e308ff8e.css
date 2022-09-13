@@ -51,12 +51,25 @@ button {
   left: 92%;
   /*background-color: #ffe3e3;*/
 }
+.login {
+  margin: 5rem;
+}
+.login-btn {
+  position: absolute;
+  top: 150%;
+  left: 25%;
+}
+.Register {
+  position: absolute;
+  top: 150%;
+  left: 60%;
+}
 .show_login {
   margin-top: 10%;
   text-align: center;
 }
 .disappear {
-  opacity: 0%;
+  opacity: 100%;
 }
 .to-do-list {
   position: absolute;
@@ -71,7 +84,7 @@ button {
   position: absolute;
   top: 10%;
   left: 5%;
-  opacity: 100;
+  opacity: 0;
   display: inline-block;
   width: 22rem;
   height: 3rem;

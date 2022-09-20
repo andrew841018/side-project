@@ -9,12 +9,11 @@ const remove_btn = document.querySelector(".remove");
 const curr_list = document.querySelector(".color");
 const clear_all = document.querySelector(".clear_all");
 const add_list = document.querySelector(".new_list");
+const user_account = document.getElementById("user-account");
 login_page.classList.toggle("show_login");
-
 login.addEventListener("click", () => {
   login_page.style.opacity = 100;
 });
-
 const margin_size = function (input_length) {
   let line = Math.floor(input_length / 18) + 1;
   let margin_bottom = 3.3 + 2.2 * (line - 1);

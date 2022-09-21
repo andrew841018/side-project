@@ -19,6 +19,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await Usr.findOne({ account }).select("+password");
   if (!user || !(await bcrypt.compare(password, user.password)))
     return next(new AppError(`Incorrect account or password`, 401));
-  user.generateToken();
+  //user.generateToken();
   server.sendToClient(user, 200, res);
 });

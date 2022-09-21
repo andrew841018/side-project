@@ -35,11 +35,22 @@ const schema = new mongoose.Schema({
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 schema.pre("save", async function (next) {
   if (this.isModified("password")) {
+    console.log(`password:${this.password}`);
     this.password = await bcrypt.hash(this.password, 12);
+    console.log(`encrypt password:${this.password}`);
   }
+  next();
+});
+schema.pre(/^find/, function (next) {
+  this.find({ active: true });
   next();
 });
 schema.methods.generateToken = async function () {

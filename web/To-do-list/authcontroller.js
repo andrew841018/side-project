@@ -81,7 +81,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     .createHash("sha256")
     .update(req.params.token)
     .digest("hex");
-  console.log(hashToken);
 
   const user = await usr.findOne({
     passwordResetToken: hashToken,
@@ -102,17 +101,25 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     token,
   });
 });
-exports.updatePassword = async (req, res, next) => {
+exports.updatePassword = catchAsync(async (req, res, next) => {
   //1)Get user
   const user = await usr.findById(req.user._id).select("+password");
   //2)Check if password is correct==>user is who he said he is
   if (!(await bcrypt.compare(req.body.passwordCurrent, user.password))) {
-    return next(new AppError(`password is wrong,try again...😀`), 401)();
+    return next(new AppError(`password is wrong,try again...😀`, 401));
   }
   //3)update password
   user.password = req.body.password;
   await user.save();
-  //4)Log user in,send JWT
+  //4)send JWT
   const token = signToken(user._id);
   server.sendToClient(user, 200, res);
-};
+  next();
+});
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  await usr.findByIdAndUpdate(req.user._id, { active: false });
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});

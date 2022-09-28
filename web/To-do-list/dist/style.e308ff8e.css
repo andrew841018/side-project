@@ -104,11 +104,6 @@ button {
   padding-bottom: 0.5rem;
   /*border: 5px solid oldlace;*/
 }
-.new_list {
-  /* border-bottom-color: #f06595;
-  border-bottom-width: 0.05rem;
-  border-bottom-style: solid;*/
-}
 .input_content {
   text-align: center;
   margin-left: 2.8125rem;
@@ -149,6 +144,13 @@ body {
   top: -2%;
   left: -12%;
   font-size: 1.1rem;
+}
+.show {
+  position: absolute;
+  left: 90%;
+  top: 60%;
+  background-color: white;
+  border: white;
 }
 
 

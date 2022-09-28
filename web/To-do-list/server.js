@@ -1,5 +1,6 @@
 const express = require("express");
 const usr = require("./Usr");
+const schema = require("./UserSchema");
 const authcontroller = require("./authcontroller");
 const bodyParser = require("body-parser");
 const router = express.Router();
@@ -38,6 +39,10 @@ router.delete(
   authcontroller.protect,
   authcontroller.deleteMe
 );
+router.get("/to-do-list/API", async function (req, res) {
+  const target = await schema.find();
+  res.status(200).json(target);
+});
 const port = 3000;
 app.listen(port, () => {
   console.log(`App running on port:${port}`);

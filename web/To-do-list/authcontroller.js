@@ -17,28 +17,18 @@ const signToken = (id) => {
 exports.protect = catchAsync(async function (req, res, next) {
   //Getting token and check it's there
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
+  if (req.cookie.jwt) {
+    token = req.cookie.jwt;
+    //Verification token
+    //jwt.verify is decoding
+    const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    //Check if user still exist
+    const currUser = await usr.findById(decode._id);
+    if (!currUser) return next();
+    //There is a login user
+    res.locals.user = currUser; //create new property in req
+    return next();
   }
-  if (!token) {
-    return next(new AppError("You are not logged in! Please log in!", 401));
-  }
-  //Verification token
-  //jwt.verify is decoding
-  const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  //Check if user still exist
-  const currUser = await usr.findById(decode._id);
-  if (!currUser)
-    return next(
-      new AppError(
-        "The user belonging to this token does no longer exist.",
-        401
-      )
-    );
-  req.user = currUser; //create new property in req
   next();
 });
 exports.forgotPassword = catchAsync(async (req, res, next) => {

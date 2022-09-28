@@ -1,0 +1,34 @@
+doctype html
+html 
+    head 
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge')
+        link(rel='stylesheet' href='/style.css')
+        title To-do-list.pug
+    body
+        .login.show_login.disappear
+            form.account
+                label(for='user-account') 
+                    strong User_Account
+                input#user-account(type='email' placeholder='account')
+            form.password
+                label(for='password')
+                    strong Password 
+                input#password(type='password' placeholder='password')
+            button.show ◎
+            button.Register Register 
+            button.login-btn Login
+        .add 
+            button.clear_all clear all 
+            .input_class 
+                h1 To Buy List 
+                input.input_content(tpye='text' placeholder='輸入待買項目')
+            ul.list-content(id='to-do-list')
+                .color 
+                    li(style='word-break:keep-all') test 
+                    button.remove X 
+        script(src='/script.js')
+        
+
+            

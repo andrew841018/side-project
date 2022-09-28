@@ -143,9 +143,14 @@ var curr_list = document.querySelector(".color");
 var clear_all = document.querySelector(".clear_all");
 var add_list = document.querySelector(".new_list");
 var user_account = document.getElementById("user-account");
+var show_passwd = document.querySelector(".show");
+var input_passwd = document.getElementById("password");
 login_page.classList.toggle("show_login");
 login.addEventListener("click", function () {
   login_page.style.opacity = 100;
+});
+show_passwd.addEventListener("click", function () {
+  if (input_passwd.type === "password") input_passwd.type = "text";else input_passwd.type = "password";
 });
 
 var margin_size = function margin_size(input_length) {
@@ -230,7 +235,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51497" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64338" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

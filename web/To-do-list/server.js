@@ -1,5 +1,4 @@
 const express = require("express");
-const usr = require("./Usr");
 const schema = require("./UserSchema");
 const authcontroller = require("./authcontroller");
 const bodyParser = require("body-parser");
@@ -25,8 +24,8 @@ app.use(xss());
 app.use("/to-do-list", limiter);
 app.use(bodyParser.json());
 app.use("/", router);
-router.post("/to-do-list/signUp", usr.signUp);
-router.post("/to-do-list/login", usr.login);
+router.post("/to-do-list/signUp", authcontroller.signUp);
+router.post("/to-do-list/login", authcontroller.login);
 router.patch("/to-do-list/forgotPassword", authcontroller.forgotPassword);
 router.patch("/to-do-list/resetPassword/:token", authcontroller.resetPassword);
 router.patch(

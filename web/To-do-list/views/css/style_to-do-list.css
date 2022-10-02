@@ -1,0 +1,121 @@
+@media (max-width: 400px) {
+  html {
+    font-size: 75%;
+    position: absolute;
+    left: 5%;
+  }
+}
+@media (max-width: 420px && min-width:401px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 830px && min-width:421px) {
+  html {
+    font-size: 180%;
+    position: absolute;
+    left: 5%;
+  }
+}
+@media screen {
+  html {
+    font-size: 80%;
+    position: absolute;
+    left: 10%;
+  }
+}
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 2rem;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+label {
+  display: inline-block;
+  width: 36px;
+  text-align: right;
+}
+button {
+  position: absolute;
+  top: 15%;
+  left: 92%;
+  /*background-color: #ffe3e3;*/
+}
+.disappear {
+  opacity: 100%;
+}
+.to-do-list {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
+.to-do-list input {
+  display: block;
+}
+.add {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  display: inline-block;
+  width: 22rem;
+  height: 3rem;
+}
+.color li {
+  /* 18 word/line */
+  position: absolute;
+  top: 0rem;
+  list-style: none;
+  border: 0.05rem solid #f06595;
+  border-color: #f06595 #ffe3e3;
+  width: 100%;
+  background-color: #ffe3e3;
+  padding-left: 0.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  /*border: 5px solid oldlace;*/
+}
+.input_content {
+  text-align: center;
+  margin-left: 2.8125rem;
+  margin-top: 0.625rem;
+  margin-bottom: 0.625rem;
+  width: 75%;
+}
+.input_class {
+  background-color: #e5dbff;
+}
+h1 {
+  padding-top: 0.625rem;
+  text-align: center;
+}
+.remove {
+  margin-top: 0.5rem;
+  margin-left: auto;
+  border: none;
+  background-color: #ffe3e3;
+  color: gray;
+}
+.color {
+  position: relative;
+  display: flex;
+
+  /* 
+    7.7rem for 3 line...and so on
+    5.5rem for 2 line
+    3.3rem for 1 line
+    */
+  margin-bottom: 3.3rem;
+}
+body {
+  position: relative;
+}
+.clear_all {
+  position: absolute;
+  top: -2%;
+  left: -12%;
+  font-size: 1.1rem;
+}

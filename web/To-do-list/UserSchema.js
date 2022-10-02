@@ -71,4 +71,5 @@ schema.methods.createRandomToken = function () {
   return resetToken;
 };
 const Usr = mongoose.model("User", schema);
+
 module.exports = Usr;

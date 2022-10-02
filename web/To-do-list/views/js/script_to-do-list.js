@@ -1,4 +1,3 @@
-"use strict";
 const login = document.querySelector(".login-btn");
 const login_page = document.querySelector(".login");
 const add_to_do_list = document.querySelector(".add-to-do-list");
@@ -12,20 +11,7 @@ const add_list = document.querySelector(".new_list");
 const user_account = document.getElementById("user-account");
 const show_passwd = document.querySelector(".show");
 const input_passwd = document.getElementById("password");
-login_page.classList.toggle("show_login");
-login.addEventListener("click", () => {
-  login_page.style.opacity = 100;
-});
-show_passwd.addEventListener("click", () => {
-  if (input_passwd.type === "password") input_passwd.type = "text";
-  else input_passwd.type = "password";
-});
-const margin_size = function (input_length) {
-  let line = Math.floor(input_length / 18) + 1;
-  let margin_bottom = 3.3 + 2.2 * (line - 1);
-
-  return String(margin_bottom) + "rem";
-};
+const input_account = document.getElementById("user-account");
 let count = 0;
 let chinese_count = 0;
 const insert_list = function (e) {
@@ -55,6 +41,12 @@ const insert_list = function (e) {
     curr.style.marginBottom = margin_size(input.length);
     toBuyList.value = "";
   }
+};
+const margin_size = function (input_length) {
+  let line = Math.floor(input_length / 18) + 1;
+  let margin_bottom = 3.3 + 2.2 * (line - 1);
+
+  return String(margin_bottom) + "rem";
 };
 const check_list = function (e) {
   this.elem = e.target.closest("ul");

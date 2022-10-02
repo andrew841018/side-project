@@ -8,7 +8,7 @@ const usr = require("./UserSchema");
 const { userInfo } = require("os");
 const sendEmail = require("./email");
 const { stat } = require("fs");
-const server = require("./server");
+const connect = require("./connect");
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
@@ -103,7 +103,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
   //4)send JWT
   const token = signToken(user._id);
-  server.sendToClient(user, 200, res);
+  connect.sendToClient(user, 200, res);
   next();
 });
 exports.deleteMe = catchAsync(async (req, res, next) => {
@@ -113,3 +113,26 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+exports.signUp = catchAsync(async (req, res, next) => {
+  const Usr = await usr.create({
+    account: req.body.account,
+    password: req.body.password,
+  });
+  connect.sendToClient(Usr, 201, res);
+});
+exports.login = catchAsync(async (req, res, next) => {
+  let { account, password } = req.body;
+  //check account/password exist
+  if (!account || !password)
+    return next(new AppError(`Please fill account and password!`, 400));
+  //check user exist and password is correct
+  const Usr = await usr.findOne({ account }).select("+password");
+  if (!Usr || !(await bcrypt.compare(password, Usr.password)))
+    return next(new AppError(`Incorrect account or password`, 401));
+  Usr.generateToken();
+  connect.sendToClient(Usr, 200, res);
+});
+exports.getData = (req, res, next) => {
+  req.params.id = req.usr._id;
+  next();
+};

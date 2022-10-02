@@ -54,15 +54,15 @@ button {
 .login {
   margin: 5rem;
 }
-.login-btn {
-  position: absolute;
-  top: 150%;
-  left: 25%;
-}
 .Register {
   position: absolute;
-  top: 150%;
+  top: 120%;
   left: 60%;
+}
+#login_submit {
+  position: absolute;
+  top: 120%;
+  left: 40%;
 }
 .show_login {
   margin-top: 10%;
@@ -148,7 +148,12 @@ body {
 .show {
   position: absolute;
   left: 90%;
-  top: 60%;
+  top: 50%;
   background-color: white;
   border: white;
+}
+.password {
+  position: relative;
+  top: 80%;
+  left: 0%;
 }

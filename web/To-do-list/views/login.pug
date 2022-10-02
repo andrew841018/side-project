@@ -1,0 +1,22 @@
+html 
+    head 
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        meta(http-equiv='X-UA-Compatible' content='IE=edge')
+        link(rel='stylesheet' href='/css/style_login.css')
+        title To-do-list.pug
+    body
+        .login.show_login.disappear
+            form(action='/login' method='post')
+                .acc
+                    label(for='user-account') 
+                        strong User_Account
+                    input#user-account(type='email' name='account' placeholder='account')
+                .passwd
+                    label(for='password' class='password')
+                        strong Password 
+                    input#password(type='password' name='password' placeholder='password')
+                input#login_submit(type='submit' value='Login')
+            button.show ◎
+            button.Register Register 
+        script(src='/js/script_login.js')

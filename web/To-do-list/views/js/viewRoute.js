@@ -25,7 +25,11 @@ app.post("/login", async function (req, res) {
   const target = await schema.find();
 });
 */
-app.post("/login", auth.login);
+app.post("/to-do-list", auth.login);
+app.post("/", (req, res) => {
+  //res.status(200).render("To-do-list");
+  console.log(req.body.to_buy);
+});
 app.listen(port, () => {
   console.log(`App running on port:${port}`);
 });

@@ -114,8 +114,8 @@ body {
   position: relative;
 }
 .clear_all {
+  font-size: 1.3rem;
   position: absolute;
   top: -2%;
   left: -12%;
-  font-size: 1.1rem;
 }

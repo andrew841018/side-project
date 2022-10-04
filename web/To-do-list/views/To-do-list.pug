@@ -6,15 +6,17 @@ html
         meta(http-equiv='X-UA-Compatible' content='IE=edge')
         link(rel='stylesheet' href='/css/style_to-do-list.css')
         title To-do-list.pug
-    bod
+    body
         .add
-            button.clear_all clear all 
-            .input_class 
-                h1 To Buy List 
-                input.input_content(tpye='text' placeholder='輸入待買項目')
+            button.clear_all clear all
+            form(action='/' method='post' onclick='insert_list()' )
+                .input_class
+                    h1 To Buy List
+                    input.input_content(tpye='text' name='to_buy' placeholder='輸入待買項目')
             ul.list-content(id='to-do-list')
-                .color 
+                .color
                     li(style='word-break:keep-all') test 
-                    button.remove X 
+                    button.remove X
+            button(onclick="document.querySelector('.input_content').value=''") submit
         script(src='/js/script_to-do-list.js')
             

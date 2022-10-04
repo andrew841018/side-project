@@ -13,7 +13,6 @@ const user_account = document.getElementById("user-account");
 const show_passwd = document.querySelector(".show");
 const input_passwd = document.getElementById("password");
 const input_account = document.getElementById("user-account");
-import fetch from "node-fetch";
 show_passwd.addEventListener("click", () => {
   if (input_passwd.type === "password") input_passwd.type = "text";
   else input_passwd.type = "password";

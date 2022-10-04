@@ -39,7 +39,7 @@ const insert_list = function (e) {
     let curr = document.querySelector(`.color-${count - 1}`);
     curr.classList.add("new_list");
     curr.style.marginBottom = margin_size(input.length);
-    toBuyList.value = "";
+    //toBuyList.value = "";
   }
 };
 const margin_size = function (input_length) {
@@ -69,6 +69,6 @@ const remove_all = function (e) {
   });
   //e.target.closest(".add").children[2].style.display = "none";
 };
-document.addEventListener("keydown", insert_list); //input new data
+//document.addEventListener("keydown", insert_list); //input new data
 document.addEventListener("click", check_list); //X button
 clear_all.addEventListener("click", remove_all); //clear all button
